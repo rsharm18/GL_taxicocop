@@ -1,1 +1,6 @@
 # requirements.txt
+
+boto3==1.24.91
+Flask==2.2.2
+Flask-Cors==3.0.10
+werkzeug==2.2.2
