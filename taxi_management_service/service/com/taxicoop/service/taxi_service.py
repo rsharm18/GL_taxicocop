@@ -1,11 +1,13 @@
-from taxi_management_service.service.com.taxicoop.dto.RegisterNewTaxiDTO import RegisterNewTaxiDto
+from taxi_management_service.service.com.taxicoop.dto.RegisterNewLocationDTO import RegisterNewLocationDTO
+from taxi_management_service.service.com.taxicoop.dto.RegisterNewTaxiDTO import RegisterNewTaxiDTO
+from taxi_management_service.service.com.taxicoop.model.Location import Location
 from taxi_management_service.service.com.taxicoop.model.Taxi import Taxi
 from taxi_management_service.service.com.taxicoop.service.DBHelper import DB_Helper
 
 
 class Taxi_Service:
 
-    def register_taxi(self, new_taxi: RegisterNewTaxiDto) -> Taxi:
+    def register_taxi(self, new_taxi: RegisterNewTaxiDTO) -> Taxi:
         new_taxi = Taxi(user_name=new_taxi.name,
                         owner_email=new_taxi.email,
                         license_plate=new_taxi.license_plate,
@@ -18,5 +20,15 @@ class Taxi_Service:
         DB_Helper.register_taxi(new_taxi)
         return new_taxi
 
-    def capture_location(self, taxi_id):
-        return "location for taxi_id = " + taxi_id
+    def capture_location(self, new_taxi_location: RegisterNewLocationDTO):
+        # TODO - check if taxi exists for a given taxi id
+
+        final_location = Location(entity_id=new_taxi_location.entity_id,
+                                  status=new_taxi_location.status,
+                                  entity_type=new_taxi_location.entity_type,
+                                  latitude=new_taxi_location.latitude,
+                                  longitude=new_taxi_location.longitude,
+                                  vehicle_type=new_taxi_location.vehicle_type
+                                  )
+        DB_Helper.publish_taxi_location(final_location)
+        return "location for entity id = " + new_taxi_location.entity_id

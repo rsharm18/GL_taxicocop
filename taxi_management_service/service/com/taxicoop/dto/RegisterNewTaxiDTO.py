@@ -1,7 +1,7 @@
 from taxi_management_service.service.com.taxicoop.model.Taxi import Taxi_Type
 
 
-class RegisterNewTaxiDto:
+class RegisterNewTaxiDTO:
     name: str
     email: str
     vehicle_type: Taxi_Type
