@@ -30,7 +30,9 @@ class Data_Generator:
                                   type=taxi_type,
                                   owner_email=f"{first_name}.{last_name}@{fake.domain_name()}",
                                   member_since=Data_Generator.generate_random_date(),
-                                  license_plate=Data_Generator.generate_license_plate()
+                                  license_plate=Data_Generator.generate_license_plate(),
+                                  latitude=random.randint(-90, 90),
+                                  longitude=random.randint(-180, 180)
                                   ).__dict__)
 
         return taxi_list

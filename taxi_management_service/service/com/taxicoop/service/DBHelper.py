@@ -1,5 +1,6 @@
 import pymongo
 
+from taxi_management_service.service.com.taxicoop.model.Location import Location
 from taxi_management_service.service.com.taxicoop.model.Taxi import Taxi
 from taxi_management_service.service.com.taxicoop.setup.Data_Generator import Data_Generator
 
@@ -8,9 +9,10 @@ db_client = pymongo.MongoClient(
 
 db = db_client.test
 # Create a Database
-aggregator_db = db_client['taxi_management']
+taxi_mgmt_db = db_client['taxi_management']
 # Create Collections
-taxis = aggregator_db['taxis']
+taxis = taxi_mgmt_db['taxis']
+location = taxi_mgmt_db['location']
 
 
 class DB_Helper:
@@ -28,3 +30,11 @@ class DB_Helper:
     @staticmethod
     def register_taxi(taxi: Taxi):
         taxis.insert_one(taxi.__dict__)
+
+    @staticmethod
+    def publish_taxi_location(loc: Location):
+        location.insert_one(loc.__dict__)
+
+    @staticmethod
+    def get_all_taxis():
+        return taxis.find()

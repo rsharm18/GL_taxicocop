@@ -36,6 +36,36 @@
             }
           },
           "response": []
+        },
+        {
+          "name": "register a location",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\":\"Rohan Gupta\",\r\n    \"email\":\"rGupta@gmail.com\",\r\n    \"vehicle_type\":\"deluxe\",\r\n    \"license_plate\":\"XX097\",\r\n    \"longitude\":140,\r\n    \"latitude\":45\r\n\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8080/api/taxi/fcebc741-5e2d-49c0-a92a-46136e1be29b/location",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "taxi",
+                "fcebc741-5e2d-49c0-a92a-46136e1be29b",
+                "location"
+              ]
+            }
+          },
+          "response": []
         }
       ]
     }
