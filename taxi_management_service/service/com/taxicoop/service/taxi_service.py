@@ -9,6 +9,8 @@ class Taxi_Service:
         new_taxi = Taxi(user_name=new_taxi.name,
                         owner_email=new_taxi.email,
                         license_plate=new_taxi.license_plate,
+                        longitude=new_taxi.longitude,
+                        latitude=new_taxi.longitude,
                         type=new_taxi.vehicle_type)
 
         # TODO - do not allow adding a taxi for already registered user
