@@ -1,7 +1,8 @@
-from flask import Flask, jsonify, json, Response, request
+from flask import Flask, jsonify
 from flask_cors import CORS
 
 from com.taxicoop.service.taxi_service import Taxi_Service
+from taxi_management_service.service.com.taxicoop.service.DBHelper import DB_Helper
 
 app = Flask(__name__)
 CORS(app)
@@ -22,4 +23,5 @@ def store_taxi_location(taxi_id):
 # Run the service on the local server it has been deployed to,
 # listening on port 8080.
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8080)
+    DB_Helper.configure_db()
+    app.run(host="0.0.0.0", port=8080, debug=True)
