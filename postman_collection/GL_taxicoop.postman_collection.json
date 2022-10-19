@@ -1,0 +1,43 @@
+{
+  "info": {
+    "_postman_id": "881217b2-e392-4cd7-acd8-922e6e40f3a5",
+    "name": "GL_taxicoop",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "taxi_service",
+      "item": [
+        {
+          "name": "register a taxi",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\":\"Rohan Gupta\",\r\n    \"email\":\"rGupta@gmail.com\",\r\n    \"vehicle_type\":\"deluxe\",\r\n    \"license_plate\":\"XX097\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8080/api/taxi/register",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "taxi",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
