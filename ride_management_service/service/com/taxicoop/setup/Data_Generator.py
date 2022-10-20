@@ -2,9 +2,8 @@ import random
 import uuid
 from datetime import date
 
+from com.taxicoop.model.Taxi import Taxi, Taxi_Status, Taxi_Type
 from faker import Faker
-
-from taxi_management_service.service.com.taxicoop.model.Taxi import Taxi, Taxi_Status, Taxi_Type
 
 fake = Faker(['en_IN', 'en-US', 'en_US', 'en_US', 'en-US'])
 

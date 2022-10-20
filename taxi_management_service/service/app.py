@@ -4,12 +4,12 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from flask import Flask, request
 from flask_cors import CORS
 
+from com.taxicoop.dto.RegisterNewLocationDTO import RegisterNewLocationDTO
+from com.taxicoop.dto.RegisterNewTaxiDTO import RegisterNewTaxiDTO
+from com.taxicoop.model.Taxi import Taxi_Type
+from com.taxicoop.service.DBHelper import DB_Helper
+from com.taxicoop.service.LocationPublisher import LocationPublisher
 from com.taxicoop.service.taxi_service import Taxi_Service
-from taxi_management_service.service.com.taxicoop.dto.RegisterNewLocationDTO import RegisterNewLocationDTO
-from taxi_management_service.service.com.taxicoop.dto.RegisterNewTaxiDTO import RegisterNewTaxiDTO
-from taxi_management_service.service.com.taxicoop.model.Taxi import Taxi_Type
-from taxi_management_service.service.com.taxicoop.service.DBHelper import DB_Helper
-from taxi_management_service.service.com.taxicoop.service.LocationPublisher import LocationPublisher
 
 app = Flask(__name__)
 CORS(app)
