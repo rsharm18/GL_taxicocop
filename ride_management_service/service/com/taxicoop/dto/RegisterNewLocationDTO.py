@@ -1,4 +1,4 @@
-from taxi_management_service.service.com.taxicoop.model.Taxi import Taxi_Type, Taxi_Status
+from com.taxicoop.model.Taxi import Taxi_Type, Taxi_Status
 
 
 class RegisterNewLocationDTO:

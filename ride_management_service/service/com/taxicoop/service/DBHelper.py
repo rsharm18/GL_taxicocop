@@ -1,8 +1,8 @@
 import pymongo
 
-from taxi_management_service.service.com.taxicoop.model.Location import Location
-from taxi_management_service.service.com.taxicoop.model.Taxi import Taxi
-from taxi_management_service.service.com.taxicoop.setup.Data_Generator import Data_Generator
+from com.taxicoop.model.Location import Location
+from com.taxicoop.model.Taxi import Taxi
+from com.taxicoop.setup.Data_Generator import Data_Generator
 
 db_client = pymongo.MongoClient(
     "mongodb+srv://taxicoop:admin123@cluster0.ykco3.mongodb.net/?retryWrites=true&w=majority")

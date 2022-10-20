@@ -1,8 +1,8 @@
 import random
 from datetime import datetime
 
-from taxi_management_service.service.com.taxicoop.model.Location import Location
-from taxi_management_service.service.com.taxicoop.service.DBHelper import DB_Helper
+from com.taxicoop.model.Location import Location
+from com.taxicoop.service.DBHelper import DB_Helper
 
 
 class LocationPublisher:
