@@ -1,8 +1,8 @@
-from taxi_management_service.service.com.taxicoop.dto.RegisterNewLocationDTO import RegisterNewLocationDTO
-from taxi_management_service.service.com.taxicoop.dto.RegisterNewTaxiDTO import RegisterNewTaxiDTO
-from taxi_management_service.service.com.taxicoop.model.Location import Location
-from taxi_management_service.service.com.taxicoop.model.Taxi import Taxi
-from taxi_management_service.service.com.taxicoop.service.DBHelper import DB_Helper
+from com.taxicoop.dto.RegisterNewLocationDTO import RegisterNewLocationDTO
+from com.taxicoop.dto.RegisterNewTaxiDTO import RegisterNewTaxiDTO
+from com.taxicoop.model.Location import Location
+from com.taxicoop.model.Taxi import Taxi
+from com.taxicoop.service.DBHelper import DB_Helper
 
 
 class Taxi_Service:

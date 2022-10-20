@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from taxi_management_service.service.com.taxicoop.model.Taxi import Taxi_Status, GeoData, Taxi_Type
+from com.taxicoop.model.Taxi import Taxi_Status, GeoData, Taxi_Type
 
 
 class Location:
