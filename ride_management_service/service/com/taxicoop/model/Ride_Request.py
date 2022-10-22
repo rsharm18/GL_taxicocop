@@ -40,3 +40,15 @@ class Ride_Request:
         self.event_timestamp = event_timestamp
         self.near_by_taxis = []
         self.location = GeoData(longitude, latitude).__dict__
+
+    def to_json(self):
+        return {
+            "ride_request_id": self.ride_request_id,
+            "vehicle_type": self.vehicle_type,
+            "rider_id": self.rider_id,
+            "ride_status": self.ride_status,
+            "request_create_timestamp": self.request_create_timestamp,
+            "event_timestamp": self.event_timestamp,
+            "near_by_taxis": self.near_by_taxis,
+            "location": self.location
+        }

@@ -1,6 +1,6 @@
 from pymongo import MongoClient, GEOSPHERE
 
-from ride_management_service.service.com.taxicoop.model.Ride_Request import Ride_Request
+from com.taxicoop.model.Ride_Request import Ride_Request
 
 db_client = MongoClient(
     "mongodb+srv://taxicoop:admin123@cluster0.ykco3.mongodb.net/?retryWrites=true&w=majority")

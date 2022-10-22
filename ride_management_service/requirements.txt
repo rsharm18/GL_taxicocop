@@ -12,3 +12,4 @@ Flask-APScheduler==1.12.4
 Faker==15.1.1
 
 load_dotenv
+requests

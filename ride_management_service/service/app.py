@@ -42,8 +42,8 @@ def request_new_ride():
             new_ride_request = RequestNewRideDTO(rider_id=data['rider_id'], vehicle_type=selected_vehicle_type,
                                                  latitude=data['latitude'],
                                                  longitude=data['longitude'])
-            service.request_ride(new_ride_request)
-            return "Successfully requested the ride"
+            return service.request_ride(new_ride_request)
+            # return "Successfully requested the ride"
         except Exception as e:
             traceback.print_exc()
             return "Failed to request the ride. Error {}".format(e.__cause__)
@@ -52,4 +52,4 @@ def request_new_ride():
 # Run the service on the local server it has been deployed to,
 # listening on port 8080.
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8080, debug=True)
+    app.run(host="0.0.0.0", port=8081, debug=True)
