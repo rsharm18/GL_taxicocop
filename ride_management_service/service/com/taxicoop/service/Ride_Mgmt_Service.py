@@ -51,15 +51,23 @@ class Ride_Service:
         #     pprint.pprint(doc)
 
     def confirm_ride_request(self, confirm_ride: ConfirmRideDTO):
+        error = {'status': 'failed',
+                 'message': 'Error booking the ride. Please try again'}
         try:
             status = {'ride_status': Ride_Request_Status.RIDE_SELECTED.value}
-            # url = '{}/{}/book'.format(TAXI_BASE_URL)
-            # payload = {}
+            url = '{}/{}/book'.format(TAXI_BASE_URL, confirm_ride.taxi_id)
+            payload = {}
+            result = requests.post(url, json=payload).json()
+
+            print("Book Taxi Result {}".format(result))
+
+            if not result['status'] == "success":
+                return error
+            print("response from taxi service = {}".format(result))
             DB_Helper.update_ride_request(confirm_ride.ride_request_id, status)
             return {'status': 'success',
                     'message': 'Successfully Booked the ride'}
         except Exception as ex:
             traceback.print_exc()
 
-        return {'status': 'failed',
-                'message': 'Error booking the ride. Please try again'}
+        return error
