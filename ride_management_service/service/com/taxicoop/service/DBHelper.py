@@ -22,3 +22,13 @@ class DB_Helper:
     def register_new_ride_request(ride: Ride_Request):
         print(ride.__dict__)
         ride_request.insert_one(ride.__dict__)
+
+    @staticmethod
+    def update_ride_request(ride_request_id, values):
+        query = {"ride_request_id": ride_request_id}
+        update = {"$set": values}
+        ride_data = ride_request.find_one(query)
+        if ride_data is None:
+            raise Exception("Invalid ride request id")
+
+        ride_request.update_one(query, update)
