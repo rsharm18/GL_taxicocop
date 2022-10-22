@@ -2,12 +2,11 @@ import pprint
 
 import pymongo
 from bson import SON
+from com.taxicoop.dto.NearByTaxiDTO import NearByTaxis
 from com.taxicoop.model.Location import Location
 from com.taxicoop.model.Taxi import Taxi
 from com.taxicoop.setup.Data_Generator import Data_Generator
 from haversine import haversine, Unit
-
-from taxi_management_service.service.com.taxicoop.dto.NearByTaxiDTO import NearByTaxis
 
 DEFINED_RADIUS = 5000
 
