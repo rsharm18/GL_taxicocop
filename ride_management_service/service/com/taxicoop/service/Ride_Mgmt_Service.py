@@ -1,10 +1,12 @@
 from os import getenv
+from typing import Dict, Any
 
 import requests
+from dotenv import load_dotenv
+
 from com.taxicoop.dto.RequestNewRideDTO import RequestNewRideDTO
 from com.taxicoop.model.Ride_Request import Ride_Request, GeoData
 from com.taxicoop.service.DBHelper import DB_Helper
-from dotenv import load_dotenv
 
 ## SEARCH RADIUS - 5KM
 DEFINED_RADIUS = 5000
@@ -15,17 +17,17 @@ TAXI_BASE_URL = getenv('TAXI_SERVICE_BASE_URL')
 
 class Ride_Service:
 
-    def request_ride(self, new_ride_request_dto: RequestNewRideDTO) -> Ride_Request:
+    def request_ride(self, new_ride_request_dto: RequestNewRideDTO) -> Dict[str, Any]:
         new_ride_request = Ride_Request(rider_id=new_ride_request_dto.rider_id,
                                         longitude=new_ride_request_dto.longitude,
-                                        latitude=new_ride_request_dto.longitude,
+                                        latitude=new_ride_request_dto.latitude,
                                         vehicle_type=new_ride_request_dto.vehicle_type)
 
         # TODO - do not allow ride request if a ride is already in progress
-
+        new_ride_request.near_by_taxis = self.__get_near_by_available_taxis__(new_ride_request.location)
         DB_Helper.register_new_ride_request(new_ride_request)
-        self.__get_near_by_available_taxis__(new_ride_request.location)
-        return new_ride_request
+        print(" new_ride_request {}".format(new_ride_request.to_json()))
+        return new_ride_request.to_json()
 
     def __get_near_by_available_taxis__(self, user_location: GeoData):
         # Getting all taxis within a certain distance range from a customer
@@ -36,9 +38,12 @@ class Ride_Service:
         payload = {'longitude': user_location['coordinates'][0],
                    'latitude': user_location['coordinates'][1]}
 
-        x = requests.post(url, json=payload)
+        print("paylaod {}".format(payload))
+        result = requests.post(url, json=payload).json()
 
-        print("x = {}".format(x))
+        print("x = {}".format(result))
+
+        return result
         # available_taxis =
         # range_query = {'location': SON([("$near", user_location), ("$maxDistance", DEFINED_RADIUS)])}
         # for doc in taxis.find(range_query):
