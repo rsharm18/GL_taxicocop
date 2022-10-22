@@ -1,136 +1,201 @@
 {
-  "info": {
-    "_postman_id": "881217b2-e392-4cd7-acd8-922e6e40f3a5",
-    "name": "GL_taxicoop",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
-  },
-  "item": [
-    {
-      "name": "taxi_service",
-      "item": [
-        {
-          "name": "register a taxi",
-          "request": {
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"name\":\"Rohan Gupta\",\r\n    \"email\":\"rGupta@gmail.com\",\r\n    \"vehicle_type\":\"deluxe\",\r\n    \"license_plate\":\"XX097\"\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "localhost:8080/api/taxi/register",
-              "host": [
-                "localhost"
-              ],
-              "port": "8080",
-              "path": [
-                "api",
-                "taxi",
-                "register"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "register a location",
-          "request": {
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"name\":\"Rohan Gupta\",\r\n    \"email\":\"rGupta@gmail.com\",\r\n    \"vehicle_type\":\"deluxe\",\r\n    \"license_plate\":\"XX097\",\r\n    \"longitude\":140,\r\n    \"latitude\":45\r\n\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "localhost:8080/api/taxi/fcebc741-5e2d-49c0-a92a-46136e1be29b/location",
-              "host": [
-                "localhost"
-              ],
-              "port": "8080",
-              "path": [
-                "api",
-                "taxi",
-                "fcebc741-5e2d-49c0-a92a-46136e1be29b",
-                "location"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "get nearby taxis",
-          "request": {
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"longitude\":-31.1383833550,\r\n    \"latitude\":36.2051394879\r\n\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "localhost:8080/api/taxi/v1/nearby-taxis",
-              "host": [
-                "localhost"
-              ],
-              "port": "8080",
-              "path": [
-                "api",
-                "taxi",
-                "v1",
-                "nearby-taxis"
-              ]
-            }
-          },
-          "response": []
-        }
-      ]
-    },
-    {
-      "name": "ride_mgmt",
-      "item": [
-        {
-          "name": "Request Ride",
-          "request": {
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"rider_id\":\"abc@gmail.com\",\r\n \"longitude\":140,\r\n    \"latitude\":45\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "localhost:8080/api/ride",
-              "host": [
-                "localhost"
-              ],
-              "port": "8080",
-              "path": [
-                "api",
-                "ride"
-              ]
-            }
-          },
-          "response": []
-        }
-      ]
-    }
-  ]
+	"info": {
+		"_postman_id": "881217b2-e392-4cd7-acd8-922e6e40f3a5",
+		"name": "GL_taxicoop",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "taxi_service",
+			"item": [
+				{
+					"name": "register a taxi",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Santosh\",\r\n    \"email\":\"s@gmail.com\",\r\n    \"vehicle_type\":\"deluxe\",\r\n    \"license_plate\":\"XX097\",\r\n    \"longitude\":-31.1383833550,\r\n    \"latitude\":36.2051394879\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/taxi/v1/register",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"taxi",
+								"v1",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "register a location",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"entity_type\":\"Taxi\",\r\n    \"status\":\"AVAILABLE\",\r\n    \"vehicle_type\":\"deluxe\",\r\n    \"longitude\":-31.1383833550,\r\n    \"latitude\":36.2051394879\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/taxi/v1/3e8b211b-c4da-4386-99b3-7e68bffeceec/location",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"taxi",
+								"v1",
+								"3e8b211b-c4da-4386-99b3-7e68bffeceec",
+								"location"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get nearby taxis",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"longitude\": 116.8511108947,\r\n    \"latitude\":1.3901487696\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/taxi/v1/nearby-taxis",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"taxi",
+								"v1",
+								"nearby-taxis"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Book a taxi",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"entity_type\":\"Taxi\",\r\n    \"status\":\"AVAILABLE\",\r\n    \"vehicle_type\":\"deluxe\",\r\n    \"longitude\":-31.1383833550,\r\n    \"latitude\":36.2051394879\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/taxi/v1/3e8b211b-c4da-4386-99b3-7e68bffecec/book",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"taxi",
+								"v1",
+								"3e8b211b-c4da-4386-99b3-7e68bffecec",
+								"book"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "ride_mgmt",
+			"item": [
+				{
+					"name": "Request Ride",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"rider_id\":\"abc@gmail.com\",\r\n     \"longitude\": 116.8511108947,\r\n    \"latitude\":1.3901487696,\r\n    \"vehicle_type\":\"UTILITY\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8081/api/ride/v1",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"ride",
+								"v1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Confirm ride",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"taxi_id\":\"3e8b211b-c4da-4386-99b3-7e68bffeceec\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8081/api/ride/v1/d5717262-5faa-4ffc-a439-386ec6cd3ddb/confirm_ride",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"ride",
+								"v1",
+								"d5717262-5faa-4ffc-a439-386ec6cd3ddb",
+								"confirm_ride"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
 }
