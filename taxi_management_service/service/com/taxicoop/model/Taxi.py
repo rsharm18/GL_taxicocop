@@ -14,6 +14,7 @@ class Taxi_Type(Enum):
     DELUXE = "DELUXE"
     LUXURY = "LUXURY"
     ECO = "ECO"
+    ALL = "ALL"
 
 
 class Taxi_Status(Enum):
