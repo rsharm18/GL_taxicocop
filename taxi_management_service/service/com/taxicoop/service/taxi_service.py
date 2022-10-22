@@ -2,9 +2,8 @@ from com.taxicoop.dto.RegisterNewLocationDTO import RegisterNewLocationDTO
 from com.taxicoop.dto.RegisterNewTaxiDTO import RegisterNewTaxiDTO
 from com.taxicoop.model.Location import Location
 from com.taxicoop.model.Taxi import Taxi
+from com.taxicoop.model.Taxi import Taxi_Type, GeoData
 from com.taxicoop.service.DBHelper import DB_Helper
-
-from taxi_management_service.service.com.taxicoop.model.Taxi import Taxi_Type, GeoData
 
 
 class Taxi_Service:
