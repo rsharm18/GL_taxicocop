@@ -21,8 +21,12 @@ mandatory_new_location_fields = {'entity_type', 'vehicle_type', 'status', 'longi
 mandatory_nearby_taxi_location_fields = {'longitude', 'latitude'}
 
 scheduler = BackgroundScheduler()
-scheduler.add_job(LocationPublisher.publish_location, "interval", seconds=45, misfire_grace_time=40, jitter=10)
+scheduler.add_job(LocationPublisher.publish_location, "interval", seconds=45, misfire_grace_time=40, jitter=10,
+                  max_instances=1, id="publish_location", name="publish_location")
+scheduler.add_job(LocationPublisher.delete_stale_data, "interval", seconds=120, misfire_grace_time=60, jitter=30,
+                  max_instances=1, id="delete_stale_locations", name="delete_stale_locations")
 scheduler.start()
+
 
 ## add a new taxi
 @app.route("/api/taxi/v1/register", methods=["POST"])
@@ -84,15 +88,16 @@ def get_available_rides():
         return "Required fields are missing. Please include the fields in the payload. {}".format(
             mandatory_nearby_taxi_location_fields)
     else:
+
         selected_vehicle_type = Taxi_Type.ALL
         if 'vehicle_type' in data.keys():
-            if selected_vehicle_type == Taxi_Type.ECO.value:
+            if data['vehicle_type'] == Taxi_Type.ECO.value:
                 selected_vehicle_type = Taxi_Type.ECO
-            elif selected_vehicle_type == Taxi_Type.LUXURY.value:
+            elif data['vehicle_type'] == Taxi_Type.LUXURY.value:
                 selected_vehicle_type = Taxi_Type.LUXURY
-            elif selected_vehicle_type == Taxi_Type.UTILITY.value:
+            elif data['vehicle_type'] == Taxi_Type.UTILITY.value:
                 selected_vehicle_type = Taxi_Type.UTILITY
-            elif selected_vehicle_type == Taxi_Type.DELUXE.value:
+            elif data['vehicle_type'] == Taxi_Type.DELUXE.value:
                 selected_vehicle_type = Taxi_Type.DELUXE
             else:
                 selected_vehicle_type = Taxi_Type.ALL

@@ -11,8 +11,8 @@ class LocationPublisher:
     def publish_location():
         print("Location publish called {}".format(datetime.now()))
 
-        if DB_Helper.get_locations_count() > 0:
-            return
+        # if DB_Helper.get_locations_count() > 0:
+        #     return
 
         taxis = DB_Helper.get_all_taxis()
 
@@ -28,3 +28,10 @@ class LocationPublisher:
             final_location = Location(entity_id=taxi['taxi_id'], status=taxi['status'], entity_type='Taxi',
                                       latitude=latitude, longitude=longitude, vehicle_type=taxi['type'])
             DB_Helper.publish_taxi_location(final_location)
+
+    @staticmethod
+    def delete_stale_data():
+        print("Calling delete stale locations")
+        print(" total count before delete {} ".format(DB_Helper.get_locations_count()))
+        DB_Helper.delete_stale_data()
+        print(" total count after delete {} ".format(DB_Helper.get_locations_count() ))
