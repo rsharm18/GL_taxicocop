@@ -1,6 +1,17 @@
 # How to run the  docker container in local
 
-``` bash 
+## Run it from shell locally
+
+```bash
+git clone https://github.com/rsharm18/GL_taxicoop.git
+cd GL_taxicoop\taxi_management_service
+pip3 install -r requirements.txt
+cd service
+python app.py
+```
+
+```bash 
+docker build -t taxi_mgmt .
 docker run -p 127.0.0.1:8080:8080/tcp taxi_mgmt
 ```
 

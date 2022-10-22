@@ -24,7 +24,7 @@ class Data_Generator:
             taxi_type: Taxi_Type = random.choice(taxi_type_list)
 
             taxi_list.append(Taxi(taxi_id=str(uuid.uuid4()),
-                                  user_name=f"{first_name} {last_name}",
+                                  owner_name=f"{first_name} {last_name}",
                                   status=Taxi_Status.AVAILABLE,
                                   type=taxi_type,
                                   owner_email=f"{first_name}.{last_name}@{fake.domain_name()}",

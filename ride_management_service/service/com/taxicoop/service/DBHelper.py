@@ -1,8 +1,8 @@
-import pymongo
+from pymongo import MongoClient, GEOSPHERE
 
 from ride_management_service.service.com.taxicoop.model.Ride_Request import Ride_Request
 
-db_client = pymongo.MongoClient(
+db_client = MongoClient(
     "mongodb+srv://taxicoop:admin123@cluster0.ykco3.mongodb.net/?retryWrites=true&w=majority")
 
 db = db_client.test
@@ -11,6 +11,9 @@ ride_mgmt_db = db_client['ride_management']
 # Create Collections
 ride_request = ride_mgmt_db['ride_request']
 trip_summary = ride_mgmt_db['trip_summary']
+
+# Create Index(es)
+ride_request.create_index([('location', GEOSPHERE)])
 
 
 class DB_Helper:

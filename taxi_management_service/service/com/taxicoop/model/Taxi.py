@@ -14,11 +14,10 @@ class Taxi_Type(Enum):
     DELUXE = "DELUXE"
     LUXURY = "LUXURY"
     ECO = "ECO"
-    ALL = "ALL"
+    ALL = "ALL"  ## query all taxi types
 
 
 class Taxi_Status(Enum):
-    ACTIVE = "ACTIVE"
     AVAILABLE = "AVAILABLE"
     RIDE_ACCEPTED = "RIDE_ACCEPTED"
     RIDE_IN_PROGRESS = "RIDE_IN_PROGRESS"
@@ -26,22 +25,13 @@ class Taxi_Status(Enum):
 
 
 class Taxi:
-    # taxi_id: str
-    # user_name: str
-    # type: Taxi_Type
-    # status: Taxi_Status
-    # owner_email: str
-    # member_since: str
-    # license_plate: str
-    # location:str
-
-    def __init__(self, user_name, type: Taxi_Type, owner_email, license_plate,
+    def __init__(self, owner_name, type: Taxi_Type, owner_email, license_plate,
                  longitude, latitude,
                  member_since=datetime.now().isoformat(),
                  taxi_id=str(uuid.uuid4()),
                  status: Taxi_Status = Taxi_Status.AVAILABLE):
         self.taxi_id = taxi_id
-        self.user_name = user_name
+        self.owner_name = owner_name
         self.type = type.value
         self.status = status.value
         self.member_since = member_since
