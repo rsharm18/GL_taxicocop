@@ -24,19 +24,21 @@ class Ride_Service:
                                         vehicle_type=new_ride_request_dto.vehicle_type)
 
         # TODO - do not allow ride request if a ride is already in progress
-        new_ride_request.near_by_taxis = self.__get_near_by_available_taxis__(new_ride_request.location)
+        new_ride_request.near_by_taxis = self.__get_near_by_available_taxis__(new_ride_request.location,
+                                                                              new_ride_request.vehicle_type)
         DB_Helper.register_new_ride_request(new_ride_request)
         print(" new_ride_request {}".format(new_ride_request.to_json()))
         return new_ride_request.to_json()
 
-    def __get_near_by_available_taxis__(self, user_location: GeoData):
+    def __get_near_by_available_taxis__(self, user_location, vehicle_type):
         # Getting all taxis within a certain distance range from a customer
         print('######################## ALL TAXIS WITHIN 5 KILOMETER ########################')
 
         url = '{}/nearby-taxis'.format(TAXI_BASE_URL)
         print("url {}".format(url))
         payload = {'longitude': user_location['coordinates'][0],
-                   'latitude': user_location['coordinates'][1]}
+                   'latitude': user_location['coordinates'][1],
+                   'vehicle_type': vehicle_type}
 
         print("paylaod {}".format(payload))
         result = requests.post(url, json=payload).json()
