@@ -27,7 +27,6 @@ class Ride_Service:
         new_ride_request.near_by_taxis = self.__get_near_by_available_taxis__(new_ride_request.location,
                                                                               new_ride_request.vehicle_type)
         DB_Helper.register_new_ride_request(new_ride_request)
-        print(" new_ride_request {}".format(new_ride_request.to_json()))
         return new_ride_request.to_json()
 
     def __get_near_by_available_taxis__(self, user_location, vehicle_type):
@@ -35,15 +34,13 @@ class Ride_Service:
         print('######################## ALL TAXIS WITHIN 5 KILOMETER ########################')
 
         url = '{}/nearby-taxis'.format(TAXI_BASE_URL)
-        print("url {}".format(url))
         payload = {'longitude': user_location['coordinates'][0],
                    'latitude': user_location['coordinates'][1],
                    'vehicle_type': vehicle_type}
 
-        print("paylaod {}".format(payload))
         result = requests.post(url, json=payload).json()
 
-        print("x = {}".format(result))
+        print("response from taxi service = {}".format(result))
 
         return result
         # available_taxis =
