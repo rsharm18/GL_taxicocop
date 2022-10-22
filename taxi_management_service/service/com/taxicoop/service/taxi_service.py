@@ -4,6 +4,8 @@ from com.taxicoop.model.Location import Location
 from com.taxicoop.model.Taxi import Taxi
 from com.taxicoop.service.DBHelper import DB_Helper
 
+from taxi_management_service.service.com.taxicoop.model.Taxi import Taxi_Type, GeoData
+
 
 class Taxi_Service:
 
@@ -12,7 +14,7 @@ class Taxi_Service:
                         owner_email=new_taxi.email,
                         license_plate=new_taxi.license_plate,
                         longitude=new_taxi.longitude,
-                        latitude=new_taxi.longitude,
+                        latitude=new_taxi.latitude,
                         type=new_taxi.vehicle_type)
 
         # TODO - do not allow adding a taxi for already registered user
@@ -32,3 +34,7 @@ class Taxi_Service:
                                   )
         DB_Helper.publish_taxi_location(final_location)
         return "location for entity id = " + new_taxi_location.entity_id
+
+    def get_nearby_taxis(self, user_latitude, user_longitude, vehicle_type=Taxi_Type.ALL):
+        user_location = GeoData(user_longitude, user_latitude)
+        return DB_Helper.get_near_by_taxis(user_location.__dict__, vehicle_type.value)

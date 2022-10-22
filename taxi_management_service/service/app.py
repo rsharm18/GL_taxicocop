@@ -18,6 +18,7 @@ service = Taxi_Service()
 
 mandatory_new_taxi_fields = {'name', 'email', 'vehicle_type', 'license_plate', 'longitude', 'latitude'}
 mandatory_new_location_fields = {'entity_type', 'vehicle_type', 'status', 'longitude', 'latitude'}
+mandatory_nearby_taxi_location_fields = {'longitude', 'latitude'}
 
 scheduler = BackgroundScheduler()
 scheduler.add_job(LocationPublisher.publish_location, "interval", seconds=45, misfire_grace_time=40, jitter=10)
@@ -38,7 +39,7 @@ scheduler.start()
 #     LocationPublisher.publish_location()
 
 
-@app.route("/api/taxi/register", methods=["POST"])
+@app.route("/api/taxi/v1/register", methods=["POST"])
 def register_taxi():
     data = request.json
 
@@ -68,7 +69,7 @@ def register_taxi():
             return "Failed to register taxi. Error {}".format(e.__cause__)
 
 
-@app.route("/api/taxi/<string:taxi_id>/location", methods=["POST"])
+@app.route("/api/taxi/v1/<string:taxi_id>/location", methods=["POST"])
 def store_taxi_location(taxi_id):
     data = request.json
     if not mandatory_new_location_fields.issubset(data.keys()):
@@ -85,6 +86,32 @@ def store_taxi_location(taxi_id):
         except Exception as e:
             traceback.print_exc()
             return "Failed to register location. Error {}".format(e.__cause__)
+
+
+@app.route("/api/taxi/v1/nearby-taxis", methods=["POST"])
+def get_available_rides():
+    data = request.json
+
+    if not mandatory_nearby_taxi_location_fields.issubset(data.keys()):
+        return "Required fields are missing. Please include the fields in the payload. {}".format(
+            mandatory_nearby_taxi_location_fields)
+    else:
+        selected_vehicle_type = Taxi_Type.ALL
+        if 'vehicle_type' in data.keys():
+            if selected_vehicle_type == Taxi_Type.ECO.value:
+                selected_vehicle_type = Taxi_Type.ECO
+            elif selected_vehicle_type == Taxi_Type.LUXURY.value:
+                selected_vehicle_type = Taxi_Type.LUXURY
+            elif selected_vehicle_type == Taxi_Type.UTILITY.value:
+                selected_vehicle_type = Taxi_Type.UTILITY
+            elif selected_vehicle_type == Taxi_Type.DELUXE.value:
+                selected_vehicle_type = Taxi_Type.DELUXE
+            else:
+                selected_vehicle_type = Taxi_Type.ALL
+
+        return service.get_nearby_taxis(user_latitude=data['latitude'],
+                                        user_longitude=data['longitude'],
+                                        vehicle_type=selected_vehicle_type)
 
 
 # Run the service on the local server it has been deployed to,
