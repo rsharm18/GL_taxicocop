@@ -1,11 +1,13 @@
+import traceback
 from os import getenv
 from typing import Dict, Any
 
 import requests
 from dotenv import load_dotenv
 
+from com.taxicoop.dto.ConfirmRideDTO import ConfirmRideDTO
 from com.taxicoop.dto.RequestNewRideDTO import RequestNewRideDTO
-from com.taxicoop.model.Ride_Request import Ride_Request, GeoData
+from com.taxicoop.model.Ride_Request import Ride_Request, GeoData, Ride_Request_Status
 from com.taxicoop.service.DBHelper import DB_Helper
 
 ## SEARCH RADIUS - 5KM
@@ -47,3 +49,17 @@ class Ride_Service:
         # range_query = {'location': SON([("$near", user_location), ("$maxDistance", DEFINED_RADIUS)])}
         # for doc in taxis.find(range_query):
         #     pprint.pprint(doc)
+
+    def confirm_ride_request(self, confirm_ride: ConfirmRideDTO):
+        try:
+            status = {'ride_status': Ride_Request_Status.RIDE_SELECTED.value}
+            # url = '{}/{}/book'.format(TAXI_BASE_URL)
+            # payload = {}
+            DB_Helper.update_ride_request(confirm_ride.ride_request_id, status)
+            return {'status': 'success',
+                    'message': 'Successfully Booked the ride'}
+        except Exception as ex:
+            traceback.print_exc()
+
+        return {'status': 'failed',
+                'message': 'Error booking the ride. Please try again'}
