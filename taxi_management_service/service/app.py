@@ -106,6 +106,9 @@ def get_available_rides():
                                         user_longitude=data['longitude'],
                                         vehicle_type=selected_vehicle_type)
 
+@app.route("/api/taxi/v1/<string:taxi_id>/book", methods=["POST"])
+def confirm_ride(taxi_id):
+    return service.reserve(taxi_id)
 
 # Run the service on the local server it has been deployed to,
 # listening on port 8080.
