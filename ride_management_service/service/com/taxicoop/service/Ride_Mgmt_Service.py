@@ -1,7 +1,16 @@
-from com.taxicoop.service.DBHelper import DB_Helper
+from os import getenv
 
-from ride_management_service.service.com.taxicoop.dto.RequestNewRideDTO import RequestNewRideDTO
-from ride_management_service.service.com.taxicoop.model.Ride_Request import Ride_Request
+import requests
+from com.taxicoop.dto.RequestNewRideDTO import RequestNewRideDTO
+from com.taxicoop.model.Ride_Request import Ride_Request, GeoData
+from com.taxicoop.service.DBHelper import DB_Helper
+from dotenv import load_dotenv
+
+## SEARCH RADIUS - 5KM
+DEFINED_RADIUS = 5000
+
+load_dotenv()
+TAXI_BASE_URL = getenv('TAXI_SERVICE_BASE_URL')
 
 
 class Ride_Service:
@@ -15,5 +24,22 @@ class Ride_Service:
         # TODO - do not allow ride request if a ride is already in progress
 
         DB_Helper.register_new_ride_request(new_ride_request)
-
+        self.__get_near_by_available_taxis__(new_ride_request.location)
         return new_ride_request
+
+    def __get_near_by_available_taxis__(self, user_location: GeoData):
+        # Getting all taxis within a certain distance range from a customer
+        print('######################## ALL TAXIS WITHIN 5 KILOMETER ########################')
+
+        url = '{}/nearby-taxis'.format(TAXI_BASE_URL)
+        print("url {}".format(url))
+        payload = {'longitude': user_location['coordinates'][0],
+                   'latitude': user_location['coordinates'][1]}
+
+        x = requests.post(url, json=payload)
+
+        print("x = {}".format(x))
+        # available_taxis =
+        # range_query = {'location': SON([("$near", user_location), ("$maxDistance", DEFINED_RADIUS)])}
+        # for doc in taxis.find(range_query):
+        #     pprint.pprint(doc)

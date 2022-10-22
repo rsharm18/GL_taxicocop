@@ -24,21 +24,7 @@ scheduler = BackgroundScheduler()
 scheduler.add_job(LocationPublisher.publish_location, "interval", seconds=45, misfire_grace_time=40, jitter=10)
 scheduler.start()
 
-
-# # initialize scheduler
-# scheduler = APScheduler()
-# # if you don't wanna use a config, you can set options here:
-# scheduler.api_enabled = True
-# scheduler.init_app(app)
-# scheduler.start()
-#
-#
-# # publish location in every 45sec
-# @scheduler.task('interval', id='publish_location', seconds=45, misfire_grace_time=40)
-# def job1():
-#     LocationPublisher.publish_location()
-
-
+## add a new taxi
 @app.route("/api/taxi/v1/register", methods=["POST"])
 def register_taxi():
     data = request.json
@@ -69,6 +55,7 @@ def register_taxi():
             return "Failed to register taxi. Error {}".format(e.__cause__)
 
 
+## add a taxi's location
 @app.route("/api/taxi/v1/<string:taxi_id>/location", methods=["POST"])
 def store_taxi_location(taxi_id):
     data = request.json
@@ -88,6 +75,7 @@ def store_taxi_location(taxi_id):
             return "Failed to register location. Error {}".format(e.__cause__)
 
 
+## get nearby taxis
 @app.route("/api/taxi/v1/nearby-taxis", methods=["POST"])
 def get_available_rides():
     data = request.json

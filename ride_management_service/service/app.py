@@ -15,7 +15,7 @@ service = Ride_Service()
 mandatory_new_ride_request_fields = {'rider_id', 'longitude', 'latitude'}
 
 
-@app.route("/api/ride", methods=["POST"])
+@app.route("/api/ride/v1", methods=["POST"])
 def request_new_ride():
     data = request.json
 
@@ -52,5 +52,4 @@ def request_new_ride():
 # Run the service on the local server it has been deployed to,
 # listening on port 8080.
 if __name__ == "__main__":
-    # DB_Helper.configure_db()
     app.run(host="0.0.0.0", port=8080, debug=True)

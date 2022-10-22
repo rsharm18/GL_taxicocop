@@ -89,7 +89,7 @@ class DB_Helper:
         for taxi_info in taxi_data:
             location = taxi_locations.get(taxi_info['taxi_id'])
             result.append(NearByTaxis(taxi_id=taxi_info['taxi_id'],
-                                      owner_name=taxi_info['user_name'],
+                                      owner_name=taxi_info['owner_name'],
                                       vehicle_type=taxi_info['type'],
                                       vehicle_status=taxi_info['status'],
                                       member_since=taxi_info['member_since'],

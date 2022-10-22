@@ -9,7 +9,7 @@ from com.taxicoop.service.DBHelper import DB_Helper
 class Taxi_Service:
 
     def register_taxi(self, new_taxi: RegisterNewTaxiDTO) -> Taxi:
-        new_taxi = Taxi(user_name=new_taxi.name,
+        new_taxi = Taxi(owner_name=new_taxi.name,
                         owner_email=new_taxi.email,
                         license_plate=new_taxi.license_plate,
                         longitude=new_taxi.longitude,
