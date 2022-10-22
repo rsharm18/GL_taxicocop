@@ -82,11 +82,11 @@
               }
             },
             "url": {
-              "raw": "localhost:8081/api/taxi/v1/nearby-taxis",
+              "raw": "localhost:8080/api/taxi/v1/nearby-taxis",
               "host": [
                 "localhost"
               ],
-              "port": "8081",
+              "port": "8080",
               "path": [
                 "api",
                 "taxi",
