@@ -13,3 +13,5 @@ docker build -t 515412545596.dkr.ecr.us-east-1.amazonaws.com/taxicocop-backend:t
 docker images
 docker push 515412545596.dkr.ecr.us-east-1.amazonaws.com/taxicocop-backend:taxi-management-service
 ```
+
+Text from Bob
