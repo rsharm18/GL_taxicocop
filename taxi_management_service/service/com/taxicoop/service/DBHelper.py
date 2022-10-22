@@ -131,3 +131,13 @@ class DB_Helper:
 
         criteria = {"timestamp": {"$lte": from_range}}
         locations.delete_many(criteria)
+
+    @staticmethod
+    def update_taxi(taxi_id, values):
+        query = {"taxi_id": taxi_id}
+        update = {"$set": values}
+        taxi_data = taxis.find_one(query)
+        if taxi_data is None:
+            raise Exception("Invalid Taxi id")
+
+        taxis.update_one(query, update)

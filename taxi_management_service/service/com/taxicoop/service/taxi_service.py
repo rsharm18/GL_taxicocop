@@ -1,9 +1,12 @@
+import traceback
+
 from com.taxicoop.dto.RegisterNewLocationDTO import RegisterNewLocationDTO
 from com.taxicoop.dto.RegisterNewTaxiDTO import RegisterNewTaxiDTO
 from com.taxicoop.model.Location import Location
 from com.taxicoop.model.Taxi import Taxi
 from com.taxicoop.model.Taxi import Taxi_Type, GeoData
 from com.taxicoop.service.DBHelper import DB_Helper
+from taxicoop.model.Taxi import Taxi_Status
 
 
 class Taxi_Service:
@@ -37,3 +40,20 @@ class Taxi_Service:
     def get_nearby_taxis(self, user_latitude, user_longitude, vehicle_type=Taxi_Type.ALL):
         user_location = GeoData(user_longitude, user_latitude)
         return DB_Helper.get_near_by_taxis(user_location.__dict__, vehicle_type.value)
+
+    def reserve(self, taxi_id):
+        try:
+
+            taxis = DB_Helper.get_taxi_by_taxi_ids([taxi_id])
+            if len(taxis) > 0:
+                taxi = taxis[0]
+                status = taxi['status']
+
+                if not status == Taxi_Status.AVAILABLE.value:
+                    return {'status': 'failed', 'message': 'Taxi is not available. The taxi is {}'.format(status)}
+
+                DB_Helper.update_taxi(taxi_id, {'status': Taxi_Status.RIDE_IN_PROGRESS.value})
+                return {'status': 'success', 'message': 'Ride in Progress'}
+        except Exception as ex:
+            traceback.print_exc()
+        return {'status': 'failed', 'message': 'Error confirming the ride'}
