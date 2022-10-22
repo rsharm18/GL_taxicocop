@@ -1,4 +1,5 @@
 import pprint
+from datetime import datetime, timedelta
 
 import pymongo
 from bson import SON
@@ -8,10 +9,13 @@ from com.taxicoop.model.Taxi import Taxi
 from com.taxicoop.setup.Data_Generator import Data_Generator
 from haversine import haversine, Unit
 
+from taxicoop.model.Taxi import Taxi_Type
+
 DEFINED_RADIUS = 5000
 
 db_client = pymongo.MongoClient(
-    "mongodb+srv://taxicoop:admin123@cluster0.ykco3.mongodb.net/?retryWrites=true&w=majority")
+    "mongodb+srv://taxicoop:admin123@cluster0.ykco3.mongodb.net/?retryWrites=true&w=majority",
+)
 
 db = db_client.test
 # Create a Database
@@ -19,6 +23,9 @@ taxi_mgmt_db = db_client['taxi_management']
 # Create Collections
 taxis = taxi_mgmt_db['taxis']
 locations = taxi_mgmt_db['locations']
+
+max_allowed_minutes_range_data = 20
+max_minutes_stale_data = 50
 
 # Create Index(es)
 locations.create_index([('position', pymongo.GEOSPHERE)])
@@ -53,7 +60,7 @@ class DB_Helper:
         return locations.estimated_document_count()
 
     @staticmethod
-    def get_taxi_by_taxi_id(taxi_ids=None):
+    def get_taxi_by_taxi_ids(taxi_ids=None):
         if taxi_ids is None:
             return []
 
@@ -67,8 +74,23 @@ class DB_Helper:
     def get_near_by_taxis(user_location, vehicle_type):
         # pprint.pprint("Location {}".format(user_location))
         print("Range \n")
-        range_query = {'position': SON([("$near", user_location), ("$maxDistance", DEFINED_RADIUS)])}
 
+        from_range = datetime.today() - timedelta(minutes=max_allowed_minutes_range_data)
+
+        print("from_range {}".format(from_range))
+
+        criteria = [{'position': SON([("$near", user_location), ("$maxDistance", DEFINED_RADIUS)])},
+                    {"timestamp": {"$gte": from_range}}]
+
+        print("input vehicle type {}".format(vehicle_type))
+        if not Taxi_Type.ALL.value == vehicle_type:
+            criteria.append({"vehicle_type": vehicle_type})
+
+        range_query = {
+            "$and": criteria
+        }
+
+        print("range_query {}".format(range_query))
         data = []
         loc1 = (user_location['coordinates'][1], user_location['coordinates'][0])
         taxi_locations = {}
@@ -82,10 +104,9 @@ class DB_Helper:
             taxi_locations[doc['entity_id']] = doc
             query_taxi_ids.append(doc['entity_id'])
 
-        # pprint.pprint("query_taxi_ids : {}".format(query_taxi_ids))
-
-        taxi_data = DB_Helper.get_taxi_by_taxi_id(query_taxi_ids)
+        taxi_data = DB_Helper.get_taxi_by_taxi_ids(query_taxi_ids)
         result = []
+        pprint.pprint(" taxi_locations {}".format(taxi_locations))
         for taxi_info in taxi_data:
             location = taxi_locations.get(taxi_info['taxi_id'])
             result.append(NearByTaxis(taxi_id=taxi_info['taxi_id'],
@@ -98,13 +119,15 @@ class DB_Helper:
                                       taxi_location=location['position']['coordinates']
                                       ).__dict__)
 
-        # print("nearest \n")
-        # nearest_query = {'position': {"$near": user_location}}
-        # for doc in locations.find(nearest_query):
-        #     position = doc['position']
-        #     loc2 = (position['coordinates'][1], position['coordinates'][0])
-        #
-        #     pprint.pprint("doc {} - distance {}".format(doc['entity_id'], haversine(loc1, loc2, Unit.KILOMETERS)))
-
         pprint.pprint(" result {}".format(result))
         return result
+
+
+    @staticmethod
+    def delete_stale_data():
+        from_range = datetime.today() - timedelta(minutes=max_minutes_stale_data)
+
+        print("from_range {}".format(from_range))
+
+        criteria = {"timestamp": {"$lte": from_range}}
+        locations.delete_many(criteria)

@@ -1,5 +1,7 @@
 from datetime import datetime
 
+from dateutil.parser import parser
+
 from com.taxicoop.model.Taxi import Taxi_Status, GeoData, Taxi_Type
 
 
@@ -12,4 +14,4 @@ class Location:
         self.position = GeoData(longitude, latitude).__dict__
         self.status = status
         self.vehicle_type = vehicle_type
-        self.timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        self.timestamp = datetime.today()
