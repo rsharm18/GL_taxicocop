@@ -7,6 +7,8 @@ from com.taxicoop.model.Taxi import Taxi
 from com.taxicoop.setup.Data_Generator import Data_Generator
 from haversine import haversine, Unit
 
+from taxi_management_service.service.com.taxicoop.dto.NearByTaxiDTO import NearByTaxis
+
 DEFINED_RADIUS = 5000
 
 db_client = pymongo.MongoClient(
@@ -52,19 +54,50 @@ class DB_Helper:
         return locations.estimated_document_count()
 
     @staticmethod
+    def get_taxi_by_taxi_id(taxi_ids=None):
+        if taxi_ids is None:
+            return []
+
+        print("taxi_ids {}".format(taxi_ids))
+        near_by_taxis = []
+        for taxi in taxis.find({'taxi_id': {'$in': taxi_ids}}):
+            near_by_taxis.append(taxi)
+        return near_by_taxis
+
+    @staticmethod
     def get_near_by_taxis(user_location, vehicle_type):
-        pprint.pprint("Location {}".format(user_location))
+        # pprint.pprint("Location {}".format(user_location))
         print("Range \n")
         range_query = {'position': SON([("$near", user_location), ("$maxDistance", DEFINED_RADIUS)])}
 
         data = []
         loc1 = (user_location['coordinates'][1], user_location['coordinates'][0])
-        for doc in locations.find(range_query):
+        taxi_locations = {}
+        query_taxi_ids = []
+        for doc in locations.find(range_query).limit(5):
             data.append(doc['entity_id'])
             position = doc['position']
             loc2 = (position['coordinates'][1], position['coordinates'][0])
-            pprint.pprint("doc {} - distance {}".format(doc['entity_id'], haversine(loc1, loc2, Unit.KILOMETERS)))
-            pprint.pprint(doc)
+            doc['distance'] = haversine(loc1, loc2, Unit.KILOMETERS)
+            # pprint.pprint("doc {} - distance {}".format(doc['entity_id'], haversine(loc1, loc2, Unit.KILOMETERS)))
+            taxi_locations[doc['entity_id']] = doc
+            query_taxi_ids.append(doc['entity_id'])
+
+        # pprint.pprint("query_taxi_ids : {}".format(query_taxi_ids))
+
+        taxi_data = DB_Helper.get_taxi_by_taxi_id(query_taxi_ids)
+        result = []
+        for taxi_info in taxi_data:
+            location = taxi_locations.get(taxi_info['taxi_id'])
+            result.append(NearByTaxis(taxi_id=taxi_info['taxi_id'],
+                                      owner_name=taxi_info['user_name'],
+                                      vehicle_type=taxi_info['type'],
+                                      vehicle_status=taxi_info['status'],
+                                      member_since=taxi_info['member_since'],
+                                      license_plate=taxi_info['license_plate'],
+                                      distance=location['distance'],
+                                      taxi_location=location['position']['coordinates']
+                                      ).__dict__)
 
         # print("nearest \n")
         # nearest_query = {'position': {"$near": user_location}}
@@ -74,4 +107,5 @@ class DB_Helper:
         #
         #     pprint.pprint("doc {} - distance {}".format(doc['entity_id'], haversine(loc1, loc2, Unit.KILOMETERS)))
 
-        return data
+        pprint.pprint(" result {}".format(result))
+        return result
