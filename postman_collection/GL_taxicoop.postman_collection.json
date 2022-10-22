@@ -66,6 +66,37 @@
             }
           },
           "response": []
+        },
+        {
+          "name": "get nearby taxis",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"longitude\":-31.1383833550,\r\n    \"latitude\":36.2051394879\r\n\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8080//api/taxi/v1/nearby-taxis",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "",
+                "api",
+                "taxi",
+                "v1",
+                "nearby-taxis"
+              ]
+            }
+          },
+          "response": []
         }
       ]
     },
