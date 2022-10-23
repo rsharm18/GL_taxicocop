@@ -10,6 +10,11 @@ fake = Faker(['en_IN', 'en-US', 'en_US', 'en_US', 'en-US'])
 # taxi_status_list = list(Taxi_Status)
 taxi_type_list = list(Taxi_Type)
 
+starting_longitude = 88.358536
+ending_longitude = 90.358536
+
+starting_latitude = 22.578005
+ending_latitude = 23.578005
 
 class Data_Generator:
 
@@ -30,8 +35,10 @@ class Data_Generator:
                                   owner_email=f"{first_name}.{last_name}@{fake.domain_name()}",
                                   member_since=Data_Generator.generate_random_date(),
                                   license_plate=Data_Generator.generate_license_plate(),
-                                  latitude=round(random.uniform(-80.9999999999999, 80.99999999999999), 10),
-                                  longitude=round(random.uniform(-160.9999999999999, 160.9999999999999), 10)
+                                  # latitude=round(random.uniform(-80.9999999999999, 80.99999999999999), 10),
+                                  # longitude=round(random.uniform(-160.9999999999999, 160.9999999999999), 10)
+                                  latitude=round(random.uniform(starting_latitude, ending_latitude), 6),
+                                  longitude=round(random.uniform(starting_longitude, ending_longitude), 6)
                                   ).__dict__)
 
         return taxi_list
