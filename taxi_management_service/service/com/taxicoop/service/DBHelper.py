@@ -9,7 +9,7 @@ from com.taxicoop.model.Taxi import Taxi
 from com.taxicoop.setup.Data_Generator import Data_Generator
 from haversine import haversine, Unit
 
-from taxicoop.model.Taxi import Taxi_Type
+from taxicoop.model.Taxi import Taxi_Type, Taxi_Status
 
 DEFINED_RADIUS = 5000
 
@@ -82,7 +82,6 @@ class DB_Helper:
         criteria = [{'position': SON([("$near", user_location), ("$maxDistance", DEFINED_RADIUS)])},
                     {"timestamp": {"$gte": from_range}}]
 
-        print("input vehicle type {}".format(vehicle_type))
         if not Taxi_Type.ALL.value == vehicle_type:
             criteria.append({"vehicle_type": vehicle_type})
 
@@ -108,6 +107,10 @@ class DB_Helper:
         result = []
         pprint.pprint(" taxi_locations {}".format(taxi_locations))
         for taxi_info in taxi_data:
+
+            if not taxi_info["status"] == Taxi_Status.AVAILABLE.value:
+                continue
+
             location = taxi_locations.get(taxi_info['taxi_id'])
             result.append(NearByTaxis(taxi_id=taxi_info['taxi_id'],
                                       owner_name=taxi_info['owner_name'],
@@ -121,7 +124,6 @@ class DB_Helper:
 
         pprint.pprint(" result {}".format(result))
         return result
-
 
     @staticmethod
     def delete_stale_data():
