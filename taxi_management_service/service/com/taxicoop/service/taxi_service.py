@@ -42,6 +42,8 @@ class Taxi_Service:
         return DB_Helper.get_near_by_taxis(user_location.__dict__, vehicle_type.value)
 
     def reserve(self, taxi_id):
+        error = {'status': 'failed', 'message': 'Error confirming the ride'}
+        print(" reserve taxi - START")
         try:
 
             taxis = DB_Helper.get_taxi_by_taxi_ids([taxi_id])
@@ -54,6 +56,8 @@ class Taxi_Service:
 
                 DB_Helper.update_taxi(taxi_id, {'status': Taxi_Status.RIDE_IN_PROGRESS.value})
                 return {'status': 'success', 'message': 'Ride in Progress'}
+            else:
+                return error
         except Exception as ex:
             traceback.print_exc()
-        return {'status': 'failed', 'message': 'Error confirming the ride'}
+        return error
