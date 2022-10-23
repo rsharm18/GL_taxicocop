@@ -24,8 +24,8 @@ taxi_mgmt_db = db_client['taxi_management']
 taxis = taxi_mgmt_db['taxis']
 locations = taxi_mgmt_db['locations']
 
-max_allowed_minutes_range_data = 20
-max_minutes_stale_data = 50
+max_allowed_minutes_range_data = 2
+max_minutes_stale_data = 5
 
 # Create Index(es)
 locations.create_index([('position', pymongo.GEOSPHERE)])
