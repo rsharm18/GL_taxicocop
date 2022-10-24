@@ -6,7 +6,7 @@ from com.taxicoop.model.Location import Location
 from com.taxicoop.model.Taxi import Taxi
 from com.taxicoop.model.Taxi import Taxi_Type, GeoData
 from com.taxicoop.service.DBHelper import DB_Helper
-from taxicoop.model.Taxi import Taxi_Status
+from com.taxicoop.model.Taxi import Taxi_Status
 
 class Taxi_Service:
 

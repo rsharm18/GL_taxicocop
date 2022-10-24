@@ -9,7 +9,7 @@ from com.taxicoop.model.Taxi import Taxi
 from com.taxicoop.setup.Data_Generator import Data_Generator
 from haversine import haversine, Unit
 
-from taxicoop.model.Taxi import Taxi_Type, Taxi_Status
+from com.taxicoop.model.Taxi import Taxi_Type, Taxi_Status
 
 DEFINED_RADIUS = 5000
 
