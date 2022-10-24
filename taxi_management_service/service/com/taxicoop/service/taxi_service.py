@@ -8,15 +8,12 @@ from com.taxicoop.model.Taxi import Taxi_Type, GeoData
 from com.taxicoop.service.DBHelper import DB_Helper
 from com.taxicoop.model.Taxi import Taxi_Status
 
+
 class Taxi_Service:
 
     def register_taxi(self, new_taxi: RegisterNewTaxiDTO) -> Taxi:
-        new_taxi = Taxi(owner_name=new_taxi.name,
-                        owner_email=new_taxi.email,
-                        license_plate=new_taxi.license_plate,
-                        longitude=new_taxi.longitude,
-                        latitude=new_taxi.latitude,
-                        type=new_taxi.vehicle_type)
+        new_taxi = Taxi(owner_name=new_taxi.name, owner_email=new_taxi.email, license_plate=new_taxi.license_plate,
+                        longitude=new_taxi.longitude, latitude=new_taxi.latitude, type=new_taxi.vehicle_type)
 
         # TODO - do not allow adding a taxi for already registered user
 
@@ -26,13 +23,9 @@ class Taxi_Service:
     def capture_location(self, new_taxi_location: RegisterNewLocationDTO):
         # TODO - check if taxi exists for a given taxi id
 
-        final_location = Location(entity_id=new_taxi_location.entity_id,
-                                  status=new_taxi_location.status,
-                                  entity_type=new_taxi_location.entity_type,
-                                  latitude=new_taxi_location.latitude,
-                                  longitude=new_taxi_location.longitude,
-                                  vehicle_type=new_taxi_location.vehicle_type
-                                  )
+        final_location = Location(entity_id=new_taxi_location.entity_id, status=new_taxi_location.status,
+                                  entity_type=new_taxi_location.entity_type, latitude=new_taxi_location.latitude,
+                                  longitude=new_taxi_location.longitude, vehicle_type=new_taxi_location.vehicle_type)
         DB_Helper.publish_taxi_location(final_location)
         return "location for entity id = " + new_taxi_location.entity_id
 
@@ -60,3 +53,22 @@ class Taxi_Service:
         except Exception as ex:
             traceback.print_exc()
         return error
+
+    def get_all_taxis(self):
+        taxis = DB_Helper.get_all_taxis()
+        result = []
+        for taxi in taxis:
+            loc = taxi['location']
+            coordinates = loc['coordinates']
+            longitude = float(coordinates[0])
+            latitude = float(coordinates[1])
+            result.append(
+                Taxi(owner_name=taxi['owner_name'], type=Taxi_Type[taxi['type']], owner_email=taxi['owner_email'],
+                     license_plate=taxi['license_plate'], member_since=taxi['member_since'], taxi_id=taxi['taxi_id'],
+                     status=Taxi_Status[taxi['status']],
+                     longitude=longitude,
+                     latitude=latitude
+                     ).__dict__
+            )
+
+        return result

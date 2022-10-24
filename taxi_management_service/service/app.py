@@ -8,7 +8,7 @@ from com.taxicoop.dto.RegisterNewLocationDTO import RegisterNewLocationDTO
 from com.taxicoop.dto.RegisterNewTaxiDTO import RegisterNewTaxiDTO
 from com.taxicoop.model.Taxi import Taxi_Type
 from com.taxicoop.service.DBHelper import DB_Helper
-from com.taxicoop.service.LocationPublisher import LocationPublisher
+from com.taxicoop.service.LocationJobHandler import LocationJobHandler
 from com.taxicoop.service.taxi_service import Taxi_Service
 
 app = Flask(__name__)
@@ -21,12 +21,17 @@ mandatory_new_location_fields = {'entity_type', 'vehicle_type', 'status', 'longi
 mandatory_nearby_taxi_location_fields = {'longitude', 'latitude'}
 
 scheduler = BackgroundScheduler()
-scheduler.add_job(LocationPublisher.publish_location, "interval", seconds=45, misfire_grace_time=40, jitter=10,
-                  max_instances=1, id="publish_location", name="publish_location")
-scheduler.add_job(LocationPublisher.delete_stale_data, "interval", seconds=120, misfire_grace_time=60, jitter=30,
+# scheduler.add_job(LocationPublisher.publish_location, "interval", seconds=45, misfire_grace_time=40, jitter=10,
+#                   max_instances=1, id="publish_location", name="publish_location")
+scheduler.add_job(LocationJobHandler.delete_stale_data, "interval", seconds=120, misfire_grace_time=60, jitter=30,
                   max_instances=1, id="delete_stale_locations", name="delete_stale_locations")
 scheduler.start()
 
+
+## add a new taxi
+@app.route("/api/taxi/v1", methods=["GET"])
+def get_all_taxis():
+    return service.get_all_taxis()
 
 ## add a new taxi
 @app.route("/api/taxi/v1/register", methods=["POST"])
