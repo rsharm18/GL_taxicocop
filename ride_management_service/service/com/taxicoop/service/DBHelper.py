@@ -32,3 +32,7 @@ class DB_Helper:
             raise Exception("Invalid ride request id")
 
         ride_request.update_one(query, update)
+
+    @classmethod
+    def get_all_rides(cls):
+        ride_request.find()

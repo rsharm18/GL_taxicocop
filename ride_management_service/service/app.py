@@ -16,6 +16,9 @@ service = Ride_Service()
 mandatory_new_ride_request_fields = {'rider_id', 'longitude', 'latitude'}
 mandatory_confirm_ride_fields = {'taxi_id'}
 
+@app.route("/api/ride/v1", methods=["GET"])
+def get_all_ride_requests():
+    return service.get_all_ride_requests()
 
 @app.route("/api/ride/v1", methods=["POST"])
 def request_new_ride():

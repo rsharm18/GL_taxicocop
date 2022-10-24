@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 
 from com.taxicoop.dto.ConfirmRideDTO import ConfirmRideDTO
 from com.taxicoop.dto.RequestNewRideDTO import RequestNewRideDTO
-from com.taxicoop.model.Ride_Request import Ride_Request, GeoData, Ride_Request_Status
+from com.taxicoop.model.Ride_Request import Ride_Request, GeoData, Ride_Request_Status, Taxi_Type
 from com.taxicoop.service.DBHelper import DB_Helper
 
 ## SEARCH RADIUS - 5KM
@@ -17,6 +17,8 @@ load_dotenv()
 TAXI_BASE_URL = getenv('TAXI_SERVICE_BASE_URL')
 
 print(" TAXI_BASE_URL {} ".format(TAXI_BASE_URL))
+
+
 class Ride_Service:
 
     def request_ride(self, new_ride_request_dto: RequestNewRideDTO) -> Dict[str, Any]:
@@ -40,7 +42,7 @@ class Ride_Service:
                    'latitude': user_location['coordinates'][1],
                    'vehicle_type': vehicle_type}
 
-        print(" Calling taxi service  {}  with payload {} ".format(url,payload))
+        print(" Calling taxi service  {}  with payload {} ".format(url, payload))
         result = requests.post(url, json=payload).json()
 
         print("response from taxi service = {}".format(result))
@@ -74,3 +76,23 @@ class Ride_Service:
             traceback.print_exc()
 
         return error
+
+    def get_all_ride_requests(self):
+        ride_requests = DB_Helper.get_all_rides()
+        result = []
+        for ride_req in ride_requests:
+            loc = ride_req['location']
+            coordinates = loc['coordinates']
+            longitude = float(coordinates[0])
+            latitude = float(coordinates[1])
+            result.append(Ride_Request(
+                rider_id=ride_req['rider_id'],
+                longitude=longitude,
+                latitude=latitude,
+                vehicle_type=Taxi_Type[ride_req['vehicle_type']],
+                request_create_timestamp=ride_req['request_create_timestamp'],
+                event_timestamp=ride_req['event_timestamp'],
+                ride_request_id=ride_req['ride_request_id'],
+                status=Ride_Request_Status[ride_req['status']]
+            ).__dict__)
+        return result
