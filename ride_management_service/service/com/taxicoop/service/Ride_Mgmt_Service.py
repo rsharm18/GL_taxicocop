@@ -16,7 +16,7 @@ DEFINED_RADIUS = 5000
 load_dotenv()
 TAXI_BASE_URL = getenv('TAXI_SERVICE_BASE_URL')
 
-
+print(" TAXI_BASE_URL {} ".format(TAXI_BASE_URL))
 class Ride_Service:
 
     def request_ride(self, new_ride_request_dto: RequestNewRideDTO) -> Dict[str, Any]:
@@ -40,6 +40,7 @@ class Ride_Service:
                    'latitude': user_location['coordinates'][1],
                    'vehicle_type': vehicle_type}
 
+        print(" Calling taxi service  {}  with payload {} ".format(url,payload))
         result = requests.post(url, json=payload).json()
 
         print("response from taxi service = {}".format(result))
@@ -57,6 +58,8 @@ class Ride_Service:
             status = {'ride_status': Ride_Request_Status.RIDE_SELECTED.value}
             url = '{}/{}/book'.format(TAXI_BASE_URL, confirm_ride.taxi_id)
             payload = {}
+
+            print(" Calling taxi service  {} ".format(url))
             result = requests.post(url, json=payload).json()
 
             print("Book Taxi Result {}".format(result))

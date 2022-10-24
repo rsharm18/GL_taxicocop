@@ -20,7 +20,7 @@ docker run -p 127.0.0.1:8080:8080/tcp taxi_mgmt
 ```bash
 aws configure
 aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 515412545596.dkr.ecr.us-east-1.amazonaws.com
-docker build -t 515412545596.dkr.ecr.us-east-1.amazonaws.com/taxicocop-backend:taxi-management-service .
+docker build -t 515412545596.dkr.ecr.us-east-1.amazonaws.com/taxicoop-backend:taxi-management-service .
 docker images
-docker push 515412545596.dkr.ecr.us-east-1.amazonaws.com/taxicocop-backend:taxi-management-service
+docker push 515412545596.dkr.ecr.us-east-1.amazonaws.com/taxicoop-backend:taxi-management-service
 ```
