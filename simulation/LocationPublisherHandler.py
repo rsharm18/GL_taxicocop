@@ -1,6 +1,10 @@
-import random
-import traceback
 import json
+import random
+import threading
+import traceback
+from datetime import datetime
+from time import sleep
+
 import requests
 from AWSIoTPythonSDK.MQTTLib import AWSIoTMQTTClient
 
@@ -29,6 +33,15 @@ myAWSIoTMQTTClient.configureMQTTOperationTimeout(5)  # 5 sec
 myAWSIoTMQTTClient.connect()
 
 
+def initiate_publish():
+    minute = None
+    while True:
+        # publish location data every minute
+        if datetime.now().minute != minute:
+            minute = datetime.now().minute
+            threading.Thread(target=publish_taxi_location_data()).start()
+
+
 def publish_taxi_location_data():
     print("publish_taxi_location_data called")
     taxis = requests.get(TAXI_BASE_URL).json()
@@ -51,7 +64,12 @@ def publish_taxi_location_data():
         }
         try:
             myAWSIoTMQTTClient.publish(TOPIC, json.dumps(payload), 1)
+            sleep(0.01)
         except Exception as ex:
             traceback.print_exc()
 
     print("publish_taxi_location_data completed")
+
+
+if __name__ == "__main__":
+    initiate_publish()
