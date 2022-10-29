@@ -7,6 +7,7 @@ from com.taxicoop.dto.ConfirmRideDTO import ConfirmRideDTO
 from com.taxicoop.dto.RequestNewRideDTO import RequestNewRideDTO
 from com.taxicoop.model.Ride_Request import Taxi_Type
 from com.taxicoop.service.Ride_Mgmt_Service import Ride_Service
+from com.taxicoop.service.Trip_Summary_Service import Trip_Summary_Service
 
 app = Flask(__name__)
 CORS(app)
@@ -89,6 +90,13 @@ def complete_ride(ride_request_id):
 
 
 ######## Trip Summmry endpoint
+@app.route("/api/rides/v1/trips", methods=["GET"])
+def get_all_trips():
+    return Trip_Summary_Service.get_all_trips()
+
+@app.route("/api/rides/v1/trips/<string:ride_request_id>", methods=["GET"])
+def get_trip_by_ride_request_id(ride_request_id):
+    return Trip_Summary_Service.get_trip_by_ride_request_id(ride_request_id)
 
 # Run the service on the local server it has been deployed to,
 # listening on port 8080.

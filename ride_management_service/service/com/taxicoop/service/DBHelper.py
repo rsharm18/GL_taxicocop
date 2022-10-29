@@ -63,3 +63,12 @@ class DB_Helper:
 
         trip_summary.update_one(query, update)
 
+    @staticmethod
+    def get_all_trips():
+        return trip_summary.find()
+
+    @staticmethod
+    def get_trip_by_ride_request_id(ride_request_id):
+        query = {"ride_request_id": ride_request_id}
+        return trip_summary.find_one(query)
+
