@@ -228,6 +228,71 @@
 					"response": []
 				},
 				{
+					"name": "Get ride request By Id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8081/api/rides/v1/e56c362e-412d-4c82-b78b-c6935c8cb8cf",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"rides",
+								"v1",
+								"e56c362e-412d-4c82-b78b-c6935c8cb8cf"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Ride Requests",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8081/api/rides/v1",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"rides",
+								"v1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Complete Trip",
 					"request": {
 						"method": "POST",
