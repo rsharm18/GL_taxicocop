@@ -28,9 +28,9 @@ class Taxi:
     def __init__(self, owner_name, type: Taxi_Type, owner_email, license_plate,
                  longitude, latitude,
                  member_since=datetime.now().isoformat(),
-                 taxi_id=str(uuid.uuid4()),
+                 taxi_id=None,
                  status: Taxi_Status = Taxi_Status.AVAILABLE):
-        self.taxi_id = taxi_id
+        self.taxi_id = uuid.uuid4().hex if taxi_id is not None else taxi_id
         self.owner_name = owner_name
         self.type = type.value
         self.status = status.value
