@@ -2,7 +2,8 @@
 	"info": {
 		"_postman_id": "881217b2-e392-4cd7-acd8-922e6e40f3a5",
 		"name": "GL_taxicoop",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "2404448"
 	},
 	"item": [
 		{
@@ -171,7 +172,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"taxi_id\":\"3e8b211b-c4da-4386-99b3-7e68bffeceec\"\r\n}\r\n",
+							"raw": "{\r\n    \"taxi_id\":\"d29796a9-3a44-4ca6-9ad8-9c5f3fa30cfa\",\r\n    \"vehicle_type\":\"Deluxe\"\r\n\r\n}\r\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -179,17 +180,144 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8081/api/ride/v1/d5717262-5faa-4ffc-a439-386ec6cd3ddb/confirm_ride",
+							"raw": "localhost:8081/api/rides/v1/e56c362e-412d-4c82-b78b-c6935c8cb8cf/confirm_ride",
 							"host": [
 								"localhost"
 							],
 							"port": "8081",
 							"path": [
 								"api",
-								"ride",
+								"rides",
 								"v1",
-								"d5717262-5faa-4ffc-a439-386ec6cd3ddb",
+								"e56c362e-412d-4c82-b78b-c6935c8cb8cf",
 								"confirm_ride"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Start Trip",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8081/api/rides/v1/e56c362e-412d-4c82-b78b-c6935c8cb8cf/start_trip",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"rides",
+								"v1",
+								"e56c362e-412d-4c82-b78b-c6935c8cb8cf",
+								"start_trip"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get ride request By Id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8081/api/rides/v1/e56c362e-412d-4c82-b78b-c6935c8cb8cf",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"rides",
+								"v1",
+								"e56c362e-412d-4c82-b78b-c6935c8cb8cf"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Ride Requests",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8081/api/rides/v1",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"rides",
+								"v1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Complete Trip",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8081/api/rides/v1/e56c362e-412d-4c82-b78b-c6935c8cb8cf/complete_trip",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"rides",
+								"v1",
+								"e56c362e-412d-4c82-b78b-c6935c8cb8cf",
+								"complete_trip"
 							]
 						}
 					},

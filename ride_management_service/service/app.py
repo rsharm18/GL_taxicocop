@@ -13,14 +13,22 @@ CORS(app)
 
 service = Ride_Service()
 
-mandatory_new_ride_request_fields = {'rider_id', 'longitude', 'latitude'}
-mandatory_confirm_ride_fields = {'taxi_id'}
+mandatory_new_ride_request_fields = {'rider_id', 'start_longitude', 'start_latitude', 'destination_longitude',
+                                     'destination_latitude'}
+mandatory_confirm_ride_fields = {'taxi_id', 'vehicle_type'}
 
-@app.route("/api/ride/v1", methods=["GET"])
+
+@app.route("/api/rides/v1", methods=["GET"])
 def get_all_ride_requests():
     return service.get_all_ride_requests()
 
-@app.route("/api/ride/v1", methods=["POST"])
+
+@app.route("/api/rides/v1/<string:ride_request_id>", methods=["GET"])
+def get_ride_requests(ride_request_id):
+    return service.get_ride_request_by_id(ride_request_id)
+
+
+@app.route("/api/rides/v1", methods=["POST"])
 def request_new_ride():
     data = request.json
 
@@ -31,7 +39,7 @@ def request_new_ride():
         try:
 
             if 'vehicle_type' not in data.keys():
-                selected_vehicle_type = Taxi_Type.DELUXE
+                selected_vehicle_type = Taxi_Type.ALL
             else:
                 selected_vehicle_type = str(data['vehicle_type']).upper()
 
@@ -41,30 +49,48 @@ def request_new_ride():
                     selected_vehicle_type = Taxi_Type.LUXURY
                 elif selected_vehicle_type == Taxi_Type.UTILITY.value:
                     selected_vehicle_type = Taxi_Type.UTILITY
-                else:
+                elif selected_vehicle_type == Taxi_Type.DELUXE.value:
                     selected_vehicle_type = Taxi_Type.DELUXE
+                else:
+                    selected_vehicle_type = Taxi_Type.ALL
 
             new_ride_request = RequestNewRideDTO(rider_id=data['rider_id'], vehicle_type=selected_vehicle_type,
-                                                 latitude=data['latitude'],
-                                                 longitude=data['longitude'])
-            return service.request_ride(new_ride_request)
-            # return "Successfully requested the ride"
+                                                 start_latitude=data['start_latitude'],
+                                                 start_longitude=data['start_longitude'],
+                                                 destination_longitude=data['destination_longitude'],
+                                                 destination_latitude=data['destination_latitude'], )
+            return service.request_ride(new_ride_request)  # return "Successfully requested the ride"
         except Exception as e:
             traceback.print_exc()
             return "Failed to request the ride. Error {}".format(e.__cause__)
 
 
-@app.route("/api/ride/v1/<string:ride_request_id>/confirm_ride", methods=["POST"])
+@app.route("/api/rides/v1/<string:ride_request_id>/confirm_ride", methods=["POST"])
 def confirm_ride(ride_request_id):
     data = request.json
     if not mandatory_confirm_ride_fields.issubset(data.keys()):
         return "Required fields are missing. Please include the fields in the payload. {}".format(
             mandatory_confirm_ride_fields)
     else:
-        confirm_ride = ConfirmRideDTO(taxi_id=data['taxi_id'], ride_request_id=ride_request_id)
+        confirm_ride = ConfirmRideDTO(taxi_id=data['taxi_id'], ride_request_id=ride_request_id,
+                                      vehicle_type=Taxi_Type[str(data['vehicle_type']).upper()])
         return service.confirm_ride_request(confirm_ride)
+
+
+@app.route("/api/rides/v1/<string:ride_request_id>/start_trip", methods=["POST"])
+def start_trip(ride_request_id):
+    return service.start_trip(ride_request_id)
+
+
+@app.route("/api/rides/v1/<string:ride_request_id>/complete_trip", methods=["POST"])
+def complete_ride(ride_request_id):
+    data = request.json
+    return service.complete_ride_request(ride_request_id)
+
+
+######## Trip Summmry endpoint
 
 # Run the service on the local server it has been deployed to,
 # listening on port 8080.
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8080)
+    app.run(host="0.0.0.0", port=8081)

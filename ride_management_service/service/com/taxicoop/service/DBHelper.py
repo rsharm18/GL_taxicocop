@@ -1,6 +1,7 @@
 from pymongo import MongoClient, GEOSPHERE
 
 from com.taxicoop.model.Ride_Request import Ride_Request
+from com.taxicoop.model.Trip_Summary import NewTrip, CompleteTrip
 
 db_client = MongoClient(
     "mongodb+srv://taxicoop:admin123@cluster0.ykco3.mongodb.net/?retryWrites=true&w=majority")
@@ -33,6 +34,32 @@ class DB_Helper:
 
         ride_request.update_one(query, update)
 
-    @classmethod
-    def get_all_rides(cls):
-        ride_request.find()
+    @staticmethod
+    def get_all_rides():
+        return ride_request.find()
+
+    @staticmethod
+    def get_ride_by_ride_request_id(ride_request_id):
+        query = {"ride_request_id": ride_request_id}
+        return ride_request.find_one(query)
+
+    ## handle trip summary data
+    @staticmethod
+    def add_new_trip_summary(new_trip:NewTrip):
+        query = {"ride_request_id": new_trip.ride_request_id}
+        trip_data = trip_summary.find_one(query)
+        if trip_data is not None:
+            raise Exception("Duplicate Trip Data not allowed")
+
+        trip_summary.insert_one(new_trip.__dict__)
+
+    @staticmethod
+    def complete_ride(complete_trip:CompleteTrip):
+        query = {"ride_request_id": complete_trip.ride_request_id}
+        update = {"$set": complete_trip.__dict__}
+        trip_data = trip_summary.find_one(query)
+        if trip_data is None:
+            raise Exception("Invalid ride request id")
+
+        trip_summary.update_one(query, update)
+
