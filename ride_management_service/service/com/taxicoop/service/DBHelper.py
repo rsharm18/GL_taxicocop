@@ -36,7 +36,7 @@ class DB_Helper:
 
     @staticmethod
     def get_all_rides():
-        ride_request.find()
+        return ride_request.find()
 
     @staticmethod
     def get_ride_by_ride_request_id(ride_request_id):

@@ -7,7 +7,8 @@ from dotenv import load_dotenv
 
 from com.taxicoop.dto.ConfirmRideDTO import ConfirmRideDTO
 from com.taxicoop.dto.RequestNewRideDTO import RequestNewRideDTO
-from com.taxicoop.model.Ride_Request import Ride_Request, Ride_Request_Status, Taxi_Type
+from com.taxicoop.model.Ride_Request import Ride_Request, Ride_Request_Status, Taxi_Type, \
+    transform_ride_db_data_to_model
 from com.taxicoop.service.DBHelper import DB_Helper
 ## SEARCH RADIUS - 5KM
 from com.taxicoop.service.Trip_Summary_Service import Trip_Summary_Service
@@ -21,6 +22,19 @@ print(" TAXI_BASE_URL {} ".format(TAXI_BASE_URL))
 
 
 class Ride_Service:
+
+    def get_ride_request_by_id(self,ride_request_id):
+        ride_request = DB_Helper.get_ride_by_ride_request_id(ride_request_id)
+        if ride_request is None:
+            return {}
+
+        return transform_ride_db_data_to_model(ride_request).__dict__
+    def get_all_ride_requests(self):
+        ride_requests = DB_Helper.get_all_rides()
+        result = []
+        for ride_req in ride_requests:
+            result.append(transform_ride_db_data_to_model(ride_req).__dict__)
+        return result
 
     def request_ride(self, new_ride_request_dto: RequestNewRideDTO) -> Dict[str, Any]:
         new_ride_request = Ride_Request(rider_id=new_ride_request_dto.rider_id,
@@ -85,32 +99,6 @@ class Ride_Service:
 
         return response
 
-    def get_all_ride_requests(self):
-        ride_requests = DB_Helper.get_all_rides()
-        result = []
-        for ride_req in ride_requests:
-            loc = ride_req['start_location']
-            coordinates = loc['coordinates']
-            start_longitude = float(coordinates[0])
-            start_latitude = float(coordinates[1])
-
-            loc = ride_req['destination_location']
-            coordinates = loc['coordinates']
-            destination_longitude = float(coordinates[0])
-            destination_latitude = float(coordinates[1])
-            result.append(Ride_Request(
-                rider_id=ride_req['rider_id'],
-                start_longitude=start_longitude,
-                start_latitude=start_latitude,
-                destination_longitude=destination_longitude,
-                destination_latitude=destination_latitude,
-                vehicle_type=Taxi_Type[ride_req['vehicle_type']],
-                request_create_timestamp=ride_req['request_create_timestamp'],
-                event_timestamp=ride_req['event_timestamp'],
-                ride_request_id=ride_req['ride_request_id'],
-                status=Ride_Request_Status[ride_req['status']]
-            ).__dict__)
-        return result
 
     def complete_ride_request(self, ride_request_id):
         response = {'status': 'failed',

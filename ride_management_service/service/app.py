@@ -23,6 +23,11 @@ def get_all_ride_requests():
     return service.get_all_ride_requests()
 
 
+@app.route("/api/rides/v1/<string:ride_request_id>", methods=["GET"])
+def get_ride_requests(ride_request_id):
+    return service.get_ride_request_by_id(ride_request_id)
+
+
 @app.route("/api/rides/v1", methods=["POST"])
 def request_new_ride():
     data = request.json
