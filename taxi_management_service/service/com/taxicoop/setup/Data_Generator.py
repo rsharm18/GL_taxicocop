@@ -10,11 +10,18 @@ fake = Faker(['en_IN', 'en-US', 'en_US', 'en_US', 'en-US'])
 # taxi_status_list = list(Taxi_Status)
 taxi_type_list = list(Taxi_Type)
 
-starting_longitude = 88.358536
-ending_longitude = 90.358536
+#starting_longitude = 88.358536
+#ending_longitude = 90.358536
 
-starting_latitude = 22.578005
-ending_latitude = 23.578005
+starting_longitude = 77.580643
+ending_longitude = 80.358536
+
+#starting_latitude = 22.578005
+#ending_latitude = 23.578005
+
+starting_latitude = 12.971599
+ending_latitude = 15.578005
+
 
 class Data_Generator:
 
