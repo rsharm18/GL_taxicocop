@@ -59,7 +59,7 @@ def request_new_ride():
                                                  start_latitude=data['start_latitude'],
                                                  start_longitude=data['start_longitude'],
                                                  destination_longitude=data['destination_longitude'],
-                                                 destination_latitude=data['destination_latitude'], )
+                                                 destination_latitude=data['destination_latitude'])
             return service.request_ride(new_ride_request)  # return "Successfully requested the ride"
         except Exception as e:
             traceback.print_exc()
@@ -73,9 +73,9 @@ def confirm_ride(ride_request_id):
         return "Required fields are missing. Please include the fields in the payload. {}".format(
             mandatory_confirm_ride_fields)
     else:
-        confirm_ride = ConfirmRideDTO(taxi_id=data['taxi_id'], ride_request_id=ride_request_id,
-                                      vehicle_type=Taxi_Type[str(data['vehicle_type']).upper()])
-        return service.confirm_ride_request(confirm_ride)
+        confirm_ride_dto = ConfirmRideDTO(taxi_id=data['taxi_id'], ride_request_id=ride_request_id,
+                                          vehicle_type=Taxi_Type[str(data['vehicle_type']).upper()])
+        return service.confirm_ride_request(confirm_ride_dto)
 
 
 @app.route("/api/rides/v1/<string:ride_request_id>/start_trip", methods=["POST"])
@@ -94,9 +94,11 @@ def complete_ride(ride_request_id):
 def get_all_trips():
     return Trip_Summary_Service.get_all_trips()
 
+
 @app.route("/api/rides/v1/trips/<string:ride_request_id>", methods=["GET"])
 def get_trip_by_ride_request_id(ride_request_id):
     return Trip_Summary_Service.get_trip_by_ride_request_id(ride_request_id)
+
 
 # Run the service on the local server it has been deployed to,
 # listening on port 8080.
