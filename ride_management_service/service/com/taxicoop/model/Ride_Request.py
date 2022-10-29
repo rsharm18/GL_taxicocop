@@ -26,7 +26,7 @@ class Ride_Request_Status(Enum):
 
 
 class Ride_Request:
-    def __init__(self, rider_id, longitude, latitude,
+    def __init__(self, rider_id, start_longitude, start_latitude,destination_longitude,destination_latitude,
                  vehicle_type=Taxi_Type.DELUXE,
                  request_create_timestamp=datetime.now().isoformat(),
                  event_timestamp=datetime.now().isoformat(),
@@ -39,7 +39,8 @@ class Ride_Request:
         self.request_create_timestamp = request_create_timestamp
         self.event_timestamp = event_timestamp
         self.near_by_taxis = []
-        self.location = GeoData(longitude, latitude).__dict__
+        self.start_location = GeoData(start_longitude, start_latitude).__dict__
+        self.destination_location = GeoData(destination_longitude, destination_latitude).__dict__
 
     def to_json(self):
         return {
@@ -50,5 +51,6 @@ class Ride_Request:
             "request_create_timestamp": self.request_create_timestamp,
             "event_timestamp": self.event_timestamp,
             "near_by_taxis": self.near_by_taxis,
-            "location": self.location
+            "start_location": self.start_location,
+            "destination_location": self.destination_location
         }
