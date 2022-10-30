@@ -30,7 +30,7 @@ class Taxi:
                  member_since=datetime.now().isoformat(),
                  taxi_id=None,
                  status: Taxi_Status = Taxi_Status.AVAILABLE):
-        self.taxi_id = uuid.uuid4().hex if taxi_id is not None else taxi_id
+        self.taxi_id = uuid.uuid4().hex if taxi_id is None else taxi_id
         self.owner_name = owner_name
         self.type = type.value
         self.status = status.value
