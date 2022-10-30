@@ -72,3 +72,20 @@ class Taxi_Service:
             )
 
         return result
+
+    def get_taxi_by_id(self, taxi_id):
+        taxi = DB_Helper.get_taxi_by_id([taxi_id])
+        result = []
+        loc = taxi['location']
+        coordinates = loc['coordinates']
+        longitude = float(coordinates[0])
+        latitude = float(coordinates[1])
+        result.append(
+            Taxi(owner_name=taxi['owner_name'], type=Taxi_Type[taxi['type']], owner_email=taxi['owner_email'],
+                 license_plate=taxi['license_plate'], member_since=taxi['member_since'], taxi_id=taxi['taxi_id'],
+                 status=Taxi_Status[taxi['status']],
+                 longitude=longitude,
+                 latitude=latitude
+                 ).__dict__
+        )
+        return result
