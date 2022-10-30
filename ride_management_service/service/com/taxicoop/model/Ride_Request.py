@@ -4,6 +4,9 @@ from enum import Enum
 
 
 def transform_ride_db_data_to_model(ride_req):
+
+    print(" ride_req {}".format(ride_req))
+
     loc = ride_req['start_location']
     coordinates = loc['coordinates']
     start_longitude = float(coordinates[0])
@@ -56,8 +59,9 @@ class Ride_Request:
                  vehicle_type=Taxi_Type.DELUXE,
                  request_create_timestamp=datetime.now().isoformat(),
                  event_timestamp=datetime.now().isoformat(),
+                 ride_request_id=None,
                  status: Ride_Request_Status = Ride_Request_Status.RIDE_REQUESTED):
-        self.ride_request_id = uuid.uuid4().hex
+        self.ride_request_id = uuid.uuid4().hex if ride_request_id is None else ride_request_id
         self.vehicle_type = vehicle_type.value
         self.rider_id = rider_id
         self.ride_status = status.value
