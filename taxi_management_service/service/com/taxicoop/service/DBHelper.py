@@ -134,3 +134,11 @@ class DB_Helper:
             raise Exception("Invalid Taxi id")
 
         taxis.update_one(query, update)
+
+    @staticmethod
+    def get_taxi_by_id(taxi_id):
+        print("taxi_id {}".format(taxi_id))
+        taxi_data = taxis.find(taxi_id)
+        if taxi_data is None:
+            raise Exception("Invalid Taxi id")
+        return taxi_data

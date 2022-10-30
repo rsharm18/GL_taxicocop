@@ -32,6 +32,16 @@ def get_all_taxis():
     return service.get_all_taxis()
 
 
+## Get taxi by id
+@app.route("/api/taxis/v1/<string:taxi_id>", methods=["GET"])
+def get_taxi_by_id():
+    return service.get_taxi_by_id()
+
+## Update taxi data
+@app.route("/api/taxis/v1/<string:taxi_id>", methods=["PATCH"])
+def update_taxi_by_id():
+    return service.update_taxi_by_id()
+
 ## add a new taxi
 @app.route("/api/taxis/v1/register", methods=["POST"])
 def register_taxi():
