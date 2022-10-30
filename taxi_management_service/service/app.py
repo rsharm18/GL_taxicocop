@@ -115,6 +115,9 @@ def get_available_rides():
 def confirm_ride(taxi_id):
     return service.reserve(taxi_id)
 
+@app.route("/api/taxis/v1/<string:taxi_id>/complete", methods=["POST"])
+def complete_ride(taxi_id):
+    return service.release(taxi_id)
 
 # Run the service on the local server it has been deployed to,
 # listening on port 8080.

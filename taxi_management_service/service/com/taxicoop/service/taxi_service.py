@@ -54,6 +54,27 @@ class Taxi_Service:
             traceback.print_exc()
         return error
 
+    def release(self, taxi_id):
+        error = {'status': 'failed', 'message': 'Error fetching ride status'}
+        print(" release taxi - START")
+        try:
+
+            taxis = DB_Helper.get_taxi_by_taxi_ids([taxi_id])
+            if len(taxis) > 0:
+                taxi = taxis[0]
+                status = taxi['status']
+
+                if not status == Taxi_Status.RIDE_IN_PROGRESS.value:
+                    return {'status': 'failed', 'message': 'Taxi is available. The taxi is {}'.format(status)}
+
+                DB_Helper.update_taxi(taxi_id, {'status': Taxi_Status.AVAILABLE.value})
+                return {'status': 'success', 'message': 'Taxi is available'}
+            else:
+                return error
+        except Exception as ex:
+            traceback.print_exc()
+        return error
+
     def get_all_taxis(self):
         taxis = DB_Helper.get_all_taxis()
         result = []
