@@ -55,7 +55,7 @@ class Taxi_Service:
         return error
 
     def release(self, taxi_id):
-        error = {'status': 'failed', 'message': 'Error fetching ride status'}
+        response = {'status': 'failed', 'message': 'Error fetching ride status'}
         print(" release taxi - START")
         try:
 
@@ -70,10 +70,10 @@ class Taxi_Service:
                 DB_Helper.update_taxi(taxi_id, {'status': Taxi_Status.AVAILABLE.value})
                 return {'status': 'success', 'message': 'Taxi is available'}
             else:
-                return error
+                return response
         except Exception as ex:
             traceback.print_exc()
-        return error
+        return response
 
     def get_all_taxis(self):
         taxis = DB_Helper.get_all_taxis()

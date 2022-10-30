@@ -4,7 +4,6 @@ from enum import Enum
 
 
 def transform_ride_db_data_to_model(ride_req):
-
     print(" ride_req {}".format(ride_req))
 
     loc = ride_req['start_location']
@@ -27,7 +26,9 @@ def transform_ride_db_data_to_model(ride_req):
         request_create_timestamp=ride_req['request_create_timestamp'],
         event_timestamp=ride_req['event_timestamp'],
         ride_request_id=ride_req['ride_request_id'],
-        status=Ride_Request_Status[ride_req['ride_status']]
+        status=Ride_Request_Status[ride_req['ride_status']],
+        selected_taxi=ride_req['selected_taxi'],
+        selected_vehicle_type=ride_req['selected_vehicle_type']
     )
 
 
@@ -60,7 +61,10 @@ class Ride_Request:
                  request_create_timestamp=datetime.now().isoformat(),
                  event_timestamp=datetime.now().isoformat(),
                  ride_request_id=None,
-                 status: Ride_Request_Status = Ride_Request_Status.RIDE_REQUESTED):
+                 status: Ride_Request_Status = Ride_Request_Status.RIDE_REQUESTED,
+                 selected_taxi='',
+                 selected_vehicle_type=''
+                 ):
         self.ride_request_id = uuid.uuid4().hex if ride_request_id is None else ride_request_id
         self.vehicle_type = vehicle_type.value
         self.rider_id = rider_id
@@ -70,7 +74,8 @@ class Ride_Request:
         self.near_by_taxis = []
         self.start_location = GeoData(start_longitude, start_latitude).__dict__
         self.destination_location = GeoData(destination_longitude, destination_latitude).__dict__
-
+        self.selected_taxi = selected_taxi
+        self.selected_vehicle_type = selected_vehicle_type
 
     def to_json(self):
         return {

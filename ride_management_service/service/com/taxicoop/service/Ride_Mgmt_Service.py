@@ -16,6 +16,7 @@ from com.taxicoop.service.Trip_Summary_Service import Trip_Summary_Service
 DEFINED_RADIUS = 5000
 
 load_dotenv()
+# TAXI_BASE_URL = "http://taxicoop-api-load-balancer-898563336.us-east-1.elb.amazonaws.com/api/taxis/v1" #  getenv('TAXI_SERVICE_BASE_URL')
 TAXI_BASE_URL = getenv('TAXI_SERVICE_BASE_URL')
 
 print(" TAXI_BASE_URL {} ".format(TAXI_BASE_URL))
@@ -23,12 +24,13 @@ print(" TAXI_BASE_URL {} ".format(TAXI_BASE_URL))
 
 class Ride_Service:
 
-    def get_ride_request_by_id(self,ride_request_id):
+    def get_ride_request_by_id(self, ride_request_id):
         ride_request = DB_Helper.get_ride_by_ride_request_id(ride_request_id)
         if ride_request is None:
             return {}
 
         return transform_ride_db_data_to_model(ride_request).__dict__
+
     def get_all_ride_requests(self):
         ride_requests = DB_Helper.get_all_rides()
         result = []
@@ -99,25 +101,29 @@ class Ride_Service:
 
         return response
 
-
     def complete_ride_request(self, ride_request_id):
         response = {'status': 'failed',
                     'message': 'Error Completing the ride. Please try again'}
         try:
             status = {'ride_status': Ride_Request_Status.RIDE_COMPLETED.value}
 
-            # TODO - uncomment this to release taxi
-            # url = '{}/{}/complete'.format(TAXI_BASE_URL, complete_ride.taxi_id)
-            # payload = {}
-            #
-            # print(" Calling taxi service  {} ".format(url))
-            # result = requests.post(url, json=payload).json()
-            #
-            # print("Complete Taxi Result {}".format(result))
-            #
-            # if not result['status'] == "success":
-            #     return response
-            # print("response from taxi service = {}".format(result))
+            ride_req_db_data = DB_Helper.get_ride_by_ride_request_id(ride_request_id)
+            ride_req = transform_ride_db_data_to_model(ride_req_db_data)
+
+            print("TAXI_BASE_URL = {} , ride_req.selected_taxi= {}".format(TAXI_BASE_URL, ride_req.selected_taxi))
+            url = '{}/{}/complete'.format(TAXI_BASE_URL, ride_req.selected_taxi)
+            payload = {}
+
+            print(" Calling taxi service  {} ".format(url))
+            result = requests.post(url, json=payload).json()
+
+            print("Complete Taxi Result {}".format(result))
+
+            if not result['status'] == "success":
+                response['message'] = result['message']
+                return response
+
+            print("response from taxi service = {}".format(result))
 
             DB_Helper.update_ride_request(ride_request_id, status)
             Trip_Summary_Service.complete_trip(ride_request_id)
@@ -133,6 +139,7 @@ class Ride_Service:
                     'message': 'Trip Started!'}
         # get ride request data
         ride_req = DB_Helper.get_ride_by_ride_request_id(ride_request_id)
+        print("ride_req ".format(ride_req))
         if ride_req is None:
             response['message'] = 'Invalid ride id'
             response['status'] = 'failed'
