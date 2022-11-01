@@ -1,79 +1,84 @@
 import pprint
 from datetime import datetime, timedelta
+from bson.objectid import ObjectId
 
 import pymongo
 import certifi
-from bson import SON
-from com.taxicoop.dto.NearByTaxiDTO import NearByTaxis
-from com.taxicoop.model.Location import Location
-from com.taxicoop.model.Taxi import Taxi
-from com.taxicoop.setup.Data_Generator import Data_Generator
-from haversine import haversine, Unit
-
-from com.taxicoop.model.Taxi import Taxi_Type, Taxi_Status
-
-DEFINED_RADIUS = 5000
 
 
-db_client = pymongo.MongoClient(
-    "mongodb+srv://taxicoop:admin123@cluster0.ykco3.mongodb.net/?retryWrites=true&w=majority",
-     tlsCAFile=certifi.where()
-)
+class Database:
+    DB_NAME = 'user_management'
 
-db = db_client.test
-# Create a Database
-user_mgmt_db = db_client['user_management']
-# Create Collections
-users = user_mgmt_db['users']
+    # collection ='users'
 
+    def __init__(self):
+        self.db_conn = pymongo.MongoClient(
+            "mongodb+srv://taxicoop:admin123@cluster0.ykco3.mongodb.net/?retryWrites=true&w=majority",
+            tlsCAFile=certifi.where()
+        )
+        self.db = self.db_conn[Database.DB_NAME]
 
-class DB_Helper:
+    # This method finds a single document using field information provided in the key parameter
+    # It assumes that the key returns a unique document. It returns None if no document is found
+    def get_single_data(self, collection, key):
+        db_collection = self.db[collection]
+        document = db_collection.find_one(key)
+        return document
 
-    # db = client.test
-
-    @staticmethod
-    def configure_db():
-        count = users.estimated_document_count()
-        if count == 0:
-            print("Adding dummy Data")
-            data = Data_Generator.generate_taxi_data(50)
-            users.insert_many(data)
-
-    @staticmethod
-    def register_User(user: User):
-        users.insert_one(user.__dict__)
+    # This method inserts the data in a new document. It assumes that any uniqueness check is done by the caller
+    def insert_single_data(self, collection, data):
+        db_collection = self.db[collection]
+        document = db_collection.insert_one(data)
+        return document.inserted_id
 
 
-    @staticmethod
-    def get_all_Users():
-        return user.find()
+class UserModel:
+    USER_COLLECTION = 'users'
 
+    def __init__(self):
+        self.db = Database()
+        self._latest_error = ''
 
-    @staticmethod
-    def get_user_by_user_ids(user_ids=None):
-        if user_ids is None:
-            return []
+    @property
+    def latest_error(self):
+        return self._latest_error
 
-        print("user_ids {}".format(user_ids))
-        users.find({'user_id': {'$in': user_ids}})
-        return users
+    # Since username should be unique in users collection, this provides a way to
+    # fetch the user document based on the Email
+    def find_by_username(self, username):
+        key = {'username': username}
+        return self.__find(key)
 
+    # Finds a document based on the unique auto-generated MongoDB object id
+    def find_by_object_id(self, obj_id):
+        key = {'_id': ObjectId(obj_id)}
+        return self.__find(key)
 
-    @staticmethod
-    def delete_stale_data():
-        from_range = datetime.today() - timedelta(minutes=max_minutes_stale_data)
+    # Private function (starting with __) to be used as the base for all find functions
+    def __find(self, key):
+        user_document = self.db.get_single_data(UserModel.USER_COLLECTION, key)
+        return user_document
 
-        print("from_range {}".format(from_range))
+    # This first checks if a user already exists with that username. If it does, it populates latest_error and returns -1
+    # If a user doesn't already exist, it'll insert a new document and return the same to the caller
+    def insert_user(self, username, email, contact_info):
+        self._latest_error = ''
+        user_document = self.find_by_username(email)
+        if (user_document):
+            self._latest_error = f'Username {email} already exists'
+            return -1
+        user_data = {'username': username, 'email': email, 'contact_info': contact_info}
+        user_obj_id = self.db.insert_single_data(UserModel.USER_COLLECTION, user_data)
+        return self.find_by_object_id(user_obj_id)
 
-        criteria = {"timestamp": {"$lte": from_range}}
-        users.delete_many(criteria)
+    def get_all_Users(self):
+        Users = UserModel.USER_COLLECTION.find()
+        result = []
+        for user in Users:
+            name = user['username']
+            email = user['email']
+            contact_info = user['contact_info']
+            result.append(name=name, email=email, contact_info= contact_info ).__dict__
 
-    @staticmethod
-    def update_User(user_id, values):
-        query = {"user_id": user_id}
-        update = {"$set": values}
-        user_data = users.find_one(query)
-        if user_data is None:
-            raise Exception("Invalid Taxi id")
+        return result
 
-        users.update_one(query, update)
