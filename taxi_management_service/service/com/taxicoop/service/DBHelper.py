@@ -12,8 +12,9 @@ from com.taxicoop.model.Taxi import Taxi_Type, Taxi_Status
 
 DEFINED_RADIUS = 5000
 
+
 db_client = pymongo.MongoClient(
-    "mongodb+srv://taxicoop:admin123@cluster0.ykco3.mongodb.net/?retryWrites=true&w=majority",
+    "mongodb+srv://taxicoop:admin123@cluster0.ykco3.mongodb.net/?retryWrites=true&w=majority"
 )
 
 db = db_client.test

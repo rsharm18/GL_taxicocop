@@ -10,3 +10,4 @@ dnspython==2.2.1
 Flask-APScheduler==1.12.4
 # used for data name and email generation
 Faker==15.1.1
+#bson
