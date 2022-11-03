@@ -14,17 +14,17 @@ mandatory_new_user_request_fields = {'_id', 'name', "email", 'contact_info'}
 
 
 # Get all users
-@app.route("/api/user/v1", methods=["GET"])
+@app.route("/api/users/v1", methods=["GET"])
 def get_all_Users():
     return service.get_all_Users()
 
 # Get Specific user by UserID
-@app.route("/api/user/v1/<string:user_id>", methods=["GET"])
+@app.route("/api/users/v1/<string:email>", methods=["GET"])
 def get_specific_User(email):
     return service.find_by_username(email)
 
 # add a new User
-@app.route("/api/user/v1/register", methods=["POST"])
+@app.route("/api/users/v1/register", methods=["POST"])
 def register_User(name, email, contact_info):
     data = request.json
 
@@ -46,5 +46,4 @@ def register_User(name, email, contact_info):
 # Please review this part of the code.. for DB
 # listening on port 8085.
 if __name__ == "__main__":
-    DB_Helper.configure_db()
-    app.run(host="0.0.0.0", port=8085, debug=True)
+    app.run(host="0.0.0.0", port=8080, debug=True)
