@@ -1,5 +1,6 @@
 import json
 import traceback
+import random
 
 from AWSIoTPythonSDK.MQTTLib import AWSIoTMQTTClient
 
@@ -34,6 +35,9 @@ def send_ride_request_to_nearby_taxis(ride_request: Ride_Request):
 
     print(" ********** send_ride_request_to_nearby_taxis ********** \n\n")
     near_by_taxis = ride_request.near_by_taxis
+
+    # randomly shuffle the nearby taxis list to give other taxis the chance to respond first
+    random.shuffle(near_by_taxis)
 
     print(" near_by_taxis {}".format(near_by_taxis))
 
