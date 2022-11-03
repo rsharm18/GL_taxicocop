@@ -7,7 +7,7 @@ from com.taxicoop.dto.RegisterNewLocationDTO import RegisterNewLocationDTO
 from com.taxicoop.dto.RegisterNewTaxiDTO import RegisterNewTaxiDTO
 from com.taxicoop.model.Taxi import Taxi_Type
 from com.taxicoop.service.taxi_service import Taxi_Service
-from taxicoop.dto.RequestBookTaxiDTO import RequestBookTaxiDTO
+from com.taxicoop.dto.RequestBookTaxiDTO import RequestBookTaxiDTO
 
 app = Flask(__name__)
 CORS(app)
