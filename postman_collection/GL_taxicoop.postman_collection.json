@@ -24,14 +24,17 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8080/api/taxi/v1/register",
+							"raw": "taxicoop-api-load-balancer-898563336.us-east-1.elb.amazonaws.com/api/taxis/v1/register",
 							"host": [
-								"localhost"
+								"taxicoop-api-load-balancer-898563336",
+								"us-east-1",
+								"elb",
+								"amazonaws",
+								"com"
 							],
-							"port": "8080",
 							"path": [
 								"api",
-								"taxi",
+								"taxis",
 								"v1",
 								"register"
 							]
@@ -54,14 +57,17 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8080/api/taxi/v1/3e8b211b-c4da-4386-99b3-7e68bffeceec/location",
+							"raw": "taxicoop-api-load-balancer-898563336.us-east-1.elb.amazonaws.com/api/taxis/v1/3e8b211b-c4da-4386-99b3-7e68bffeceec/location",
 							"host": [
-								"localhost"
+								"taxicoop-api-load-balancer-898563336",
+								"us-east-1",
+								"elb",
+								"amazonaws",
+								"com"
 							],
-							"port": "8080",
 							"path": [
 								"api",
-								"taxi",
+								"taxis",
 								"v1",
 								"3e8b211b-c4da-4386-99b3-7e68bffeceec",
 								"location"
@@ -77,7 +83,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"longitude\": 116.8511108947,\r\n    \"latitude\":1.3901487696\r\n}\r\n",
+							"raw": "{\r\n    \"longitude\": -30.416116,\r\n    \"latitude\":36.28062\r\n}\r\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -85,14 +91,17 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8080/api/taxi/v1/nearby-taxis",
+							"raw": "taxicoop-api-load-balancer-898563336.us-east-1.elb.amazonaws.com/api/taxis/v1/nearby-taxis",
 							"host": [
-								"localhost"
+								"taxicoop-api-load-balancer-898563336",
+								"us-east-1",
+								"elb",
+								"amazonaws",
+								"com"
 							],
-							"port": "8080",
 							"path": [
 								"api",
-								"taxi",
+								"taxis",
 								"v1",
 								"nearby-taxis"
 							]
@@ -115,17 +124,44 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8080/api/taxi/v1/3e8b211b-c4da-4386-99b3-7e68bffecec/book",
+							"raw": "taxicoop-api-load-balancer-898563336.us-east-1.elb.amazonaws.com/api/taxis/v1/3e8b211b-c4da-4386-99b3-7e68bffecec/book",
 							"host": [
-								"localhost"
+								"taxicoop-api-load-balancer-898563336",
+								"us-east-1",
+								"elb",
+								"amazonaws",
+								"com"
 							],
-							"port": "8080",
 							"path": [
 								"api",
-								"taxi",
+								"taxis",
 								"v1",
 								"3e8b211b-c4da-4386-99b3-7e68bffecec",
 								"book"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all Taxis",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://taxicoop-api-load-balancer-898563336.us-east-1.elb.amazonaws.com/api/taxis/v1",
+							"protocol": "http",
+							"host": [
+								"taxicoop-api-load-balancer-898563336",
+								"us-east-1",
+								"elb",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"api",
+								"taxis",
+								"v1"
 							]
 						}
 					},
@@ -143,7 +179,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"rider_id\":\"abc@gmail.com\",\r\n     \"longitude\": 116.8511108947,\r\n    \"latitude\":1.3901487696,\r\n    \"vehicle_type\":\"UTILITY\"\r\n}",
+							"raw": "{\r\n    \"rider_id\":\"abc@gmail.com\",\r\n     \"start_longitude\": 90.89289,\r\n    \"start_latitude\":24.256683,\r\n    \"destination_longitude\": 116.8511108947,\r\n    \"destination_latitude\":1.3901487696\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -151,14 +187,17 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8081/api/ride/v1",
+							"raw": "taxicoop-api-load-balancer-898563336.us-east-1.elb.amazonaws.com/api/rides/v1",
 							"host": [
-								"localhost"
+								"taxicoop-api-load-balancer-898563336",
+								"us-east-1",
+								"elb",
+								"amazonaws",
+								"com"
 							],
-							"port": "8081",
 							"path": [
 								"api",
-								"ride",
+								"rides",
 								"v1"
 							]
 						}
@@ -172,7 +211,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"taxi_id\":\"d29796a9-3a44-4ca6-9ad8-9c5f3fa30cfa\",\r\n    \"vehicle_type\":\"Deluxe\"\r\n\r\n}\r\n",
+							"raw": "{\r\n    \"taxi_id\":\"53d87aea912544a09cca3b6a3b4470b9\",\r\n    \"vehicle_type\":\"UTILITY\"\r\n}\r\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -180,16 +219,19 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8081/api/rides/v1/e56c362e-412d-4c82-b78b-c6935c8cb8cf/confirm_ride",
+							"raw": "taxicoop-api-load-balancer-898563336.us-east-1.elb.amazonaws.com/api/rides/v1/0578f8185efc45089ca3c0b998c29483/confirm_ride",
 							"host": [
-								"localhost"
+								"taxicoop-api-load-balancer-898563336",
+								"us-east-1",
+								"elb",
+								"amazonaws",
+								"com"
 							],
-							"port": "8081",
 							"path": [
 								"api",
 								"rides",
 								"v1",
-								"e56c362e-412d-4c82-b78b-c6935c8cb8cf",
+								"0578f8185efc45089ca3c0b998c29483",
 								"confirm_ride"
 							]
 						}
@@ -211,16 +253,19 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8081/api/rides/v1/e56c362e-412d-4c82-b78b-c6935c8cb8cf/start_trip",
+							"raw": "taxicoop-api-load-balancer-898563336.us-east-1.elb.amazonaws.com/api/rides/v1/85d6234d34994806a146df92b9a672fd/start_trip",
 							"host": [
-								"localhost"
+								"taxicoop-api-load-balancer-898563336",
+								"us-east-1",
+								"elb",
+								"amazonaws",
+								"com"
 							],
-							"port": "8081",
 							"path": [
 								"api",
 								"rides",
 								"v1",
-								"e56c362e-412d-4c82-b78b-c6935c8cb8cf",
+								"85d6234d34994806a146df92b9a672fd",
 								"start_trip"
 							]
 						}
@@ -245,16 +290,19 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8081/api/rides/v1/e56c362e-412d-4c82-b78b-c6935c8cb8cf",
+							"raw": "taxicoop-api-load-balancer-898563336.us-east-1.elb.amazonaws.com/api/rides/v1/e6a6f2bb62bd48cba776a9f3ce2b13e1",
 							"host": [
-								"localhost"
+								"taxicoop-api-load-balancer-898563336",
+								"us-east-1",
+								"elb",
+								"amazonaws",
+								"com"
 							],
-							"port": "8081",
 							"path": [
 								"api",
 								"rides",
 								"v1",
-								"e56c362e-412d-4c82-b78b-c6935c8cb8cf"
+								"e6a6f2bb62bd48cba776a9f3ce2b13e1"
 							]
 						}
 					},
@@ -278,16 +326,19 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8081/api/rides/v1/e56c362e-412d-4c82-b78b-c6935c8cb8cf",
+							"raw": "taxicoop-api-load-balancer-898563336.us-east-1.elb.amazonaws.com/api/rides/v1/0578f8185efc45089ca3c0b998c29483",
 							"host": [
-								"localhost"
+								"taxicoop-api-load-balancer-898563336",
+								"us-east-1",
+								"elb",
+								"amazonaws",
+								"com"
 							],
-							"port": "8081",
 							"path": [
 								"api",
 								"rides",
 								"v1",
-								"e56c362e-412d-4c82-b78b-c6935c8cb8cf"
+								"0578f8185efc45089ca3c0b998c29483"
 							]
 						}
 					},
@@ -311,16 +362,18 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8081/api/rides/v1/e56c362e-412d-4c82-b78b-c6935c8cb8cf",
+							"raw": "taxicoop-api-load-balancer-898563336.us-east-1.elb.amazonaws.com/api/rides/v1",
 							"host": [
-								"localhost"
+								"taxicoop-api-load-balancer-898563336",
+								"us-east-1",
+								"elb",
+								"amazonaws",
+								"com"
 							],
-							"port": "8081",
 							"path": [
 								"api",
 								"rides",
-								"v1",
-								"e56c362e-412d-4c82-b78b-c6935c8cb8cf"
+								"v1"
 							]
 						}
 					},
@@ -344,11 +397,14 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8081/api/rides/v1",
+							"raw": "taxicoop-api-load-balancer-898563336.us-east-1.elb.amazonaws.com/api/rides/v1",
 							"host": [
-								"localhost"
+								"taxicoop-api-load-balancer-898563336",
+								"us-east-1",
+								"elb",
+								"amazonaws",
+								"com"
 							],
-							"port": "8081",
 							"path": [
 								"api",
 								"rides",
@@ -373,16 +429,19 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8081/api/rides/v1/e56c362e-412d-4c82-b78b-c6935c8cb8cf/complete_trip",
+							"raw": "taxicoop-api-load-balancer-898563336.us-east-1.elb.amazonaws.com/api/rides/v1/85d6234d34994806a146df92b9a672fd/complete_trip",
 							"host": [
-								"localhost"
+								"taxicoop-api-load-balancer-898563336",
+								"us-east-1",
+								"elb",
+								"amazonaws",
+								"com"
 							],
-							"port": "8081",
 							"path": [
 								"api",
 								"rides",
 								"v1",
-								"e56c362e-412d-4c82-b78b-c6935c8cb8cf",
+								"85d6234d34994806a146df92b9a672fd",
 								"complete_trip"
 							]
 						}
@@ -390,6 +449,10 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "user_management",
+			"item": []
 		}
 	]
 }
