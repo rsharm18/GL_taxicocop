@@ -8,7 +8,7 @@ from com.taxicoop.model.Taxi import Taxi
 from com.taxicoop.model.Taxi import Taxi_Type, GeoData
 from com.taxicoop.service.DBHelper import DB_Helper
 from com.taxicoop.model.Taxi import Taxi_Status
-from taxicoop.dto.RequestBookTaxiDTO import RequestBookTaxiDTO
+from com.taxicoop.dto.RequestBookTaxiDTO import RequestBookTaxiDTO
 
 import requests
 from dotenv import load_dotenv
