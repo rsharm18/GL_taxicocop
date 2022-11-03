@@ -11,13 +11,14 @@ from com.taxicoop.model.Ride_Request import Ride_Request, Ride_Request_Status, T
     transform_ride_db_data_to_model
 from com.taxicoop.service.DBHelper import DB_Helper
 ## SEARCH RADIUS - 5KM
+from com.taxicoop.service.RideReq_To_Nearby_Taxi_Helper import send_ride_request_to_nearby_taxis
 from com.taxicoop.service.Trip_Summary_Service import Trip_Summary_Service
 
 DEFINED_RADIUS = 5000
 
 load_dotenv()
 # TAXI_BASE_URL = "http://taxicoop-api-load-balancer-898563336.us-east-1.elb.amazonaws.com/api/taxis/v1" #  getenv('TAXI_SERVICE_BASE_URL')
-TAXI_BASE_URL = getenv('TAXI_SERVICE_BASE_URL')
+TAXI_BASE_URL = getenv('TAXI_SERVICE_BASE_URL', 'http://localhost:8081')
 
 print(" TAXI_BASE_URL {} ".format(TAXI_BASE_URL))
 
@@ -46,10 +47,10 @@ class Ride_Service:
                                         destination_latitude=new_ride_request_dto.destination_latitude,
                                         vehicle_type=new_ride_request_dto.vehicle_type)
 
-        # TODO - do not allow ride request if a ride is already in progress
         new_ride_request.near_by_taxis = self.__get_near_by_available_taxis__(new_ride_request.start_location,
                                                                               new_ride_request.vehicle_type)
         DB_Helper.register_new_ride_request(new_ride_request)
+        send_ride_request_to_nearby_taxis(new_ride_request)
         return new_ride_request.to_json()
 
     def __get_near_by_available_taxis__(self, user_location, vehicle_type):
