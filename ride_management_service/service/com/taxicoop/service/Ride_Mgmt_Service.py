@@ -11,24 +11,25 @@ from com.taxicoop.model.Ride_Request import Ride_Request, Ride_Request_Status, T
     transform_ride_db_data_to_model
 from com.taxicoop.service.DBHelper import DB_Helper
 ## SEARCH RADIUS - 5KM
+from com.taxicoop.service.RideReq_To_Nearby_Taxi_Helper import send_ride_request_to_nearby_taxis
 from com.taxicoop.service.Trip_Summary_Service import Trip_Summary_Service
 
-DEFINED_RADIUS = 5000
-
 load_dotenv()
-TAXI_BASE_URL = getenv('TAXI_SERVICE_BASE_URL')
+# TAXI_BASE_URL = "http://taxicoop-api-load-balancer-898563336.us-east-1.elb.amazonaws.com/api/taxis/v1" #  getenv('TAXI_SERVICE_BASE_URL')
+TAXI_BASE_URL = getenv('TAXI_SERVICE_BASE_URL', 'http://localhost:8081/api/taxis/v1/')
 
 print(" TAXI_BASE_URL {} ".format(TAXI_BASE_URL))
 
 
 class Ride_Service:
 
-    def get_ride_request_by_id(self,ride_request_id):
+    def get_ride_request_by_id(self, ride_request_id):
         ride_request = DB_Helper.get_ride_by_ride_request_id(ride_request_id)
         if ride_request is None:
             return {}
 
         return transform_ride_db_data_to_model(ride_request).__dict__
+
     def get_all_ride_requests(self):
         ride_requests = DB_Helper.get_all_rides()
         result = []
@@ -44,10 +45,10 @@ class Ride_Service:
                                         destination_latitude=new_ride_request_dto.destination_latitude,
                                         vehicle_type=new_ride_request_dto.vehicle_type)
 
-        # TODO - do not allow ride request if a ride is already in progress
         new_ride_request.near_by_taxis = self.__get_near_by_available_taxis__(new_ride_request.start_location,
                                                                               new_ride_request.vehicle_type)
         DB_Helper.register_new_ride_request(new_ride_request)
+        send_ride_request_to_nearby_taxis(new_ride_request)
         return new_ride_request.to_json()
 
     def __get_near_by_available_taxis__(self, user_location, vehicle_type):
@@ -65,12 +66,11 @@ class Ride_Service:
         print("response from taxi service = {}".format(result))
 
         return result
-        # available_taxis =
-        # range_query = {'location': SON([("$near", user_location), ("$maxDistance", DEFINED_RADIUS)])}
-        # for doc in taxis.find(range_query):
-        #     pprint.pprint(doc)
 
     def confirm_ride_request(self, confirm_ride: ConfirmRideDTO):
+
+        print("Confirming Ride Request {}".format(confirm_ride))
+
         response = {'status': 'failed',
                     'message': 'Error booking the ride. Please try again'}
         try:
@@ -79,26 +79,23 @@ class Ride_Service:
                 'selected_taxi': confirm_ride.taxi_id,
                 'selected_vehicle_type': confirm_ride.vehicle_type
             }
-            url = '{}/{}/book'.format(TAXI_BASE_URL, confirm_ride.taxi_id)
-            payload = {}
 
-            print(" Calling taxi service  {} ".format(url))
-            result = requests.post(url, json=payload).json()
+            ride_req = transform_ride_db_data_to_model(DB_Helper.get_ride_by_ride_request_id(confirm_ride.ride_request_id))
+            print(ride_req.__dict__)
+            print(" ride_req.ride_status= {} , {} , ride_req.ride_status == Ride_Request_Status.RIDE_REQUESTED.value = {}".format(ride_req.ride_status,Ride_Request_Status.RIDE_REQUESTED.value, ride_req.ride_status == Ride_Request_Status.RIDE_REQUESTED.value))
 
-            print("Book Taxi Result {}".format(result))
+            if ride_req.ride_status == Ride_Request_Status.RIDE_REQUESTED.value:
+                DB_Helper.update_ride_request(confirm_ride.ride_request_id, data)
+                return {'status': 'success',
+                        'message': 'Successfully Booked the ride'}
 
-            if not result['status'] == "success":
-                response['message'] = result['message']
-                return response
-            print("response from taxi service = {}".format(result))
-            DB_Helper.update_ride_request(confirm_ride.ride_request_id, data)
-            return {'status': 'success',
-                    'message': 'Successfully Booked the ride'}
+            return {'status': 'failed',
+                    'message': 'ERROR : ride is already booked. Current ride status {}'.format(ride_req.ride_status)}
+
         except Exception as ex:
             traceback.print_exc()
 
         return response
-
 
     def complete_ride_request(self, ride_request_id):
         response = {'status': 'failed',
@@ -106,18 +103,23 @@ class Ride_Service:
         try:
             status = {'ride_status': Ride_Request_Status.RIDE_COMPLETED.value}
 
-            # TODO - uncomment this to release taxi
-            # url = '{}/{}/complete'.format(TAXI_BASE_URL, complete_ride.taxi_id)
-            # payload = {}
-            #
-            # print(" Calling taxi service  {} ".format(url))
-            # result = requests.post(url, json=payload).json()
-            #
-            # print("Complete Taxi Result {}".format(result))
-            #
-            # if not result['status'] == "success":
-            #     return response
-            # print("response from taxi service = {}".format(result))
+            ride_req_db_data = DB_Helper.get_ride_by_ride_request_id(ride_request_id)
+            ride_req = transform_ride_db_data_to_model(ride_req_db_data)
+
+            print("TAXI_BASE_URL = {} , ride_req.selected_taxi= {}".format(TAXI_BASE_URL, ride_req.selected_taxi))
+            url = '{}/{}/complete'.format(TAXI_BASE_URL, ride_req.selected_taxi)
+            payload = {}
+
+            print(" Calling taxi service  {} ".format(url))
+            result = requests.post(url, json=payload).json()
+
+            print("Complete Taxi Result {}".format(result))
+
+            if not result['status'] == "success":
+                response['message'] = result['message']
+                return response
+
+            print("response from taxi service = {}".format(result))
 
             DB_Helper.update_ride_request(ride_request_id, status)
             Trip_Summary_Service.complete_trip(ride_request_id)
@@ -133,6 +135,7 @@ class Ride_Service:
                     'message': 'Trip Started!'}
         # get ride request data
         ride_req = DB_Helper.get_ride_by_ride_request_id(ride_request_id)
+        print("ride_req ".format(ride_req))
         if ride_req is None:
             response['message'] = 'Invalid ride id'
             response['status'] = 'failed'

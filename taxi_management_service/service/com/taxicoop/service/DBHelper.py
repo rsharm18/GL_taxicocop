@@ -4,12 +4,11 @@ from datetime import datetime, timedelta
 import pymongo
 import certifi
 from bson import SON
+from haversine import haversine, Unit
+
 from com.taxicoop.dto.NearByTaxiDTO import NearByTaxis
 from com.taxicoop.model.Location import Location
 from com.taxicoop.model.Taxi import Taxi
-from com.taxicoop.setup.Data_Generator import Data_Generator
-from haversine import haversine, Unit
-
 from com.taxicoop.model.Taxi import Taxi_Type, Taxi_Status
 
 DEFINED_RADIUS = 5000
@@ -37,14 +36,6 @@ locations.create_index([('position', pymongo.GEOSPHERE)])
 class DB_Helper:
 
     # db = client.test
-
-    @staticmethod
-    def configure_db():
-        count = taxis.estimated_document_count()
-        if count == 0:
-            print("Adding dummy Data")
-            data = Data_Generator.generate_taxi_data(50)
-            taxis.insert_many(data)
 
     @staticmethod
     def register_taxi(taxi: Taxi):
@@ -146,3 +137,11 @@ class DB_Helper:
             raise Exception("Invalid Taxi id")
 
         taxis.update_one(query, update)
+
+    @staticmethod
+    def get_taxi_by_id(taxi_id):
+        print("taxi_id {}".format(taxi_id))
+        taxi_data = taxis.find(taxi_id)
+        if taxi_data is None:
+            raise Exception("Invalid Taxi id")
+        return taxi_data
