@@ -7,6 +7,7 @@ from com.taxicoop.dto.RegisterNewLocationDTO import RegisterNewLocationDTO
 from com.taxicoop.dto.RegisterNewTaxiDTO import RegisterNewTaxiDTO
 from com.taxicoop.model.Taxi import Taxi_Type
 from com.taxicoop.service.taxi_service import Taxi_Service
+from taxicoop.dto.RequestBookTaxiDTO import RequestBookTaxiDTO
 
 app = Flask(__name__)
 CORS(app)
@@ -16,15 +17,7 @@ service = Taxi_Service()
 mandatory_new_taxi_fields = {'name', 'email', 'vehicle_type', 'license_plate', 'longitude', 'latitude'}
 mandatory_new_location_fields = {'entity_type', 'vehicle_type', 'status', 'longitude', 'latitude'}
 mandatory_nearby_taxi_location_fields = {'longitude', 'latitude'}
-
-
-# scheduler = BackgroundScheduler()
-# scheduler.add_job(LocationPublisher.publish_location, "interval", seconds=45, misfire_grace_time=40, jitter=10,
-#                   max_instances=1, id="publish_location", name="publish_location")
-# scheduler.add_job(LocationJobHandler.delete_stale_data, "interval", seconds=120, misfire_grace_time=60, jitter=30,
-#                   max_instances=1, id="delete_stale_locations", name="delete_stale_locations")
-# scheduler.start()
-
+mandatory_taxi_booking_request_fields = {'start_location', 'destination_location', 'ride_request_id'}
 
 ## add a new taxi
 @app.route("/api/taxis/v1", methods=["GET"])
@@ -37,10 +30,12 @@ def get_all_taxis():
 def get_taxi_by_id():
     return service.get_taxi_by_id()
 
+
 ## Update taxi data
 @app.route("/api/taxis/v1/<string:taxi_id>", methods=["PATCH"])
 def update_taxi_by_id():
     return service.update_taxi_by_id()
+
 
 ## add a new taxi
 @app.route("/api/taxis/v1/register", methods=["POST"])
@@ -123,11 +118,23 @@ def get_available_rides():
 
 @app.route("/api/taxis/v1/<string:taxi_id>/book", methods=["POST"])
 def confirm_ride(taxi_id):
-    return service.reserve(taxi_id)
+    request_payload = request.json
+    if not mandatory_taxi_booking_request_fields.issubset(request_payload.keys()):
+        print("Missing Fields {}".format(mandatory_taxi_booking_request_fields))
+        return "Required fields are missing. Please include the fields in the payload. {}".format(
+            mandatory_taxi_booking_request_fields)
+    else:
+        book_taxi_req_payload = RequestBookTaxiDTO(taxi_id=taxi_id,
+                                                   start_location=request_payload['start_location'],
+                                                   destination_location=request_payload['destination_location'],
+                                                   ride_request_id=request_payload['ride_request_id'])
+        return service.reserve(taxi_id, ride_req=book_taxi_req_payload)
+
 
 @app.route("/api/taxis/v1/<string:taxi_id>/complete", methods=["POST"])
 def complete_ride(taxi_id):
     return service.release(taxi_id)
+
 
 # Run the service on the local server it has been deployed to,
 # listening on port 8080.
