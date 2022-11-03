@@ -2,7 +2,6 @@ import pprint
 from datetime import datetime, timedelta
 
 import pymongo
-import certifi
 from bson import SON
 from haversine import haversine, Unit
 
@@ -15,8 +14,7 @@ DEFINED_RADIUS = 5000
 
 
 db_client = pymongo.MongoClient(
-    "mongodb+srv://taxicoop:admin123@cluster0.ykco3.mongodb.net/?retryWrites=true&w=majority",
-     tlsCAFile=certifi.where()
+    "mongodb+srv://taxicoop:admin123@cluster0.ykco3.mongodb.net/?retryWrites=true&w=majority"
 )
 
 db = db_client.test
