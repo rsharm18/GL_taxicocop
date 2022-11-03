@@ -18,7 +18,7 @@ ending_longitude = 90.358536
 starting_latitude = 22.578005
 ending_latitude = 23.578005
 
-REGISTER_TAXI_URL = "http://taxicoop-api-load-balancer-898563336.us-east-1.elb.amazonaws.com/api/taxi/v1/register"
+REGISTER_TAXI_URL = "http://taxicoop-api-load-balancer-898563336.us-east-1.elb.amazonaws.com/api/taxis/v1/register"
 
 SIMULATED_TAXI_COUNT = 80
 

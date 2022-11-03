@@ -18,7 +18,7 @@ ending_longitude = 90.358536
 starting_latitude = 22.578005
 ending_latitude = 23.578005
 
-TAXI_BASE_URL = "http://taxicoop-api-load-balancer-898563336.us-east-1.elb.amazonaws.com/api/taxi/v1"
+TAXI_BASE_URL = "http://taxicoop-api-load-balancer-898563336.us-east-1.elb.amazonaws.com/api/taxis/v1"
 RIDE_REQUEST_URL = "http://taxicoop-api-load-balancer-898563336.us-east-1.elb.amazonaws.com/api/rides/v1"
 
 max_user_per_taxi = 8

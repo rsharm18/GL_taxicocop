@@ -8,7 +8,7 @@ from time import sleep
 import requests
 from AWSIoTPythonSDK.MQTTLib import AWSIoTMQTTClient
 
-TAXI_BASE_URL = "http://taxicoop-api-load-balancer-898563336.us-east-1.elb.amazonaws.com/api/taxi/v1"
+TAXI_BASE_URL = "http://taxicoop-api-load-balancer-898563336.us-east-1.elb.amazonaws.com/api/taxis/v1"
 TOPIC = 'iot/topic/location'
 
 clientId = 'TAXI_LOCATION_PUBLISHER'
