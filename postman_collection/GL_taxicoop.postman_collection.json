@@ -452,7 +452,88 @@
 		},
 		{
 			"name": "user_management",
-			"item": []
+			"item": [
+				{
+					"name": "get all users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "taxicoop-api-load-balancer-898563336.us-east-1.elb.amazonaws.com/api/users/v1",
+							"host": [
+								"taxicoop-api-load-balancer-898563336",
+								"us-east-1",
+								"elb",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"api",
+								"users",
+								"v1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get user by email",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "taxicoop-api-load-balancer-898563336.us-east-1.elb.amazonaws.com/api/users/v1/sharmaji@sharmaji.com",
+							"host": [
+								"taxicoop-api-load-balancer-898563336",
+								"us-east-1",
+								"elb",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"api",
+								"users",
+								"v1",
+								"sharmaji@sharmaji.com"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register a new user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \"name\":\"Sharmaji\", \r\n\"email\":\"hello@sharmaji.com\", \r\n\"contact_info\":\"xxx\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "taxicoop-api-load-balancer-898563336.us-east-1.elb.amazonaws.com/api/users/v1/register",
+							"host": [
+								"taxicoop-api-load-balancer-898563336",
+								"us-east-1",
+								"elb",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"api",
+								"users",
+								"v1",
+								"register"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	]
 }
