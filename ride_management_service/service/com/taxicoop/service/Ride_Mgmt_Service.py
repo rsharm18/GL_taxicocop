@@ -131,7 +131,7 @@ class Ride_Service:
             ride_req = transform_ride_db_data_to_model(ride_req_db_data)
 
             print("TAXI_BASE_URL = {} , ride_req.selected_taxi= {}".format(TAXI_BASE_URL, ride_req.selected_taxi))
-            url = '{}/{}/complete'.format(TAXI_BASE_URL, ride_req.selected_taxi)
+            url = '{}/{}/release'.format(TAXI_BASE_URL, ride_req.selected_taxi)
             payload = {}
 
             print(" Calling taxi service  {} ".format(url))

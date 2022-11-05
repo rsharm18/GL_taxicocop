@@ -134,3 +134,18 @@ class Taxi_Service:
                  ).__dict__
         )
         return result
+
+    def update_taxi_by_id(self, payload):
+        try:
+            DB_Helper.update_taxi(payload['taxi_id'], payload)
+            return {
+                'status': 'success',
+                'message': 'Successfully updated the taxi data'
+            }
+        except Exception as ex:
+            traceback.print_exc()
+
+        return {
+            'status': 'failed',
+            'message': 'Error updating the taxi data'
+        }

@@ -18,6 +18,8 @@ mandatory_new_taxi_fields = {'name', 'email', 'vehicle_type', 'license_plate', '
 mandatory_new_location_fields = {'entity_type', 'vehicle_type', 'status', 'longitude', 'latitude'}
 mandatory_nearby_taxi_location_fields = {'longitude', 'latitude'}
 mandatory_taxi_booking_request_fields = {'start_location', 'destination_location', 'ride_request_id'}
+updatable_taxi_fields = {'name', 'email', 'longitude', 'latitude'}
+
 
 ## add a new taxi
 @app.route("/api/taxis/v1", methods=["GET"])
@@ -27,14 +29,21 @@ def get_all_taxis():
 
 ## Get taxi by id
 @app.route("/api/taxis/v1/<string:taxi_id>", methods=["GET"])
-def get_taxi_by_id():
-    return service.get_taxi_by_id()
+def get_taxi_by_id(taxi_id):
+    return service.get_taxi_by_id(taxi_id)
 
 
 ## Update taxi data
 @app.route("/api/taxis/v1/<string:taxi_id>", methods=["PATCH"])
-def update_taxi_by_id():
-    return service.update_taxi_by_id()
+def update_taxi_by_id(taxi_id):
+    data = request.json
+
+    payload = {'taxi_id': taxi_id}
+    for key in updatable_taxi_fields:
+        if key in data.keys():
+            payload[key] = data[key]
+
+    return service.update_taxi_by_id(payload)
 
 
 ## add a new taxi
@@ -131,7 +140,7 @@ def confirm_ride(taxi_id):
         return service.reserve(taxi_id, ride_req=book_taxi_req_payload)
 
 
-@app.route("/api/taxis/v1/<string:taxi_id>/complete", methods=["POST"])
+@app.route("/api/taxis/v1/<string:taxi_id>/release", methods=["POST"])
 def complete_ride(taxi_id):
     return service.release(taxi_id)
 

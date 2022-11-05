@@ -10,6 +10,8 @@ service = UserService()
 
 mandatory_new_user_request_fields = {'name', "email", 'contact_info'}
 
+updatable_user_fields = {'name', 'contact_info', 'status'}
+
 
 # Get all users
 @app.route("/api/users/v1", methods=["GET"])
@@ -38,6 +40,19 @@ def register_user():
         except Exception as e:
             traceback.print_exc()
             return "Failed to register User. Error {}".format(e.__cause__)
+
+
+## Update user  data
+@app.route("/api/users/v1/<string:email>", methods=["PATCH"])
+def update_user(email):
+    data = request.json
+
+    payload = {'email': email}
+    for key in updatable_user_fields:
+        if key in data.keys():
+            payload[key] = data[key]
+
+    return service.update_user(payload)
 
 
 # Please review this part of the code.. for DB
