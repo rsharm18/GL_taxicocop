@@ -166,6 +166,39 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Update taxi",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Ravi\",\r\n    \"email\":\"rks@gmail.com\",\r\n    \"vehicle_type\":\"deluxe\",\r\n    \"license_plate\":\"XX097\",\r\n    \"longitude\":-31.1383833550,\r\n    \"latitude\":36.2051394879\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "taxicoop-api-load-balancer-898563336.us-east-1.elb.amazonaws.com/api/taxis/v1/97ceb207ae8e41c193d60f577e13f6ba",
+							"host": [
+								"taxicoop-api-load-balancer-898563336",
+								"us-east-1",
+								"elb",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"api",
+								"taxis",
+								"v1",
+								"97ceb207ae8e41c193d60f577e13f6ba"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -528,6 +561,39 @@
 								"users",
 								"v1",
 								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update a user",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \"name\":\"blocked\", \r\n\"email\":\"hello@sharmaji.com\", \r\n\"contact_info\":\"xxx\",\r\n\"status\":\"BLOCKED\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "taxicoop-api-load-balancer-898563336.us-east-1.elb.amazonaws.com/api/users/v1/Jennifer.Wilkerson@white-kim.biz",
+							"host": [
+								"taxicoop-api-load-balancer-898563336",
+								"us-east-1",
+								"elb",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"api",
+								"users",
+								"v1",
+								"Jennifer.Wilkerson@white-kim.biz"
 							]
 						}
 					},
