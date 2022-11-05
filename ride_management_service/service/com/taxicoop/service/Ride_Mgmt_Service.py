@@ -10,13 +10,17 @@ from com.taxicoop.dto.RequestNewRideDTO import RequestNewRideDTO
 from com.taxicoop.model.Ride_Request import Ride_Request, Ride_Request_Status, Taxi_Type, \
     transform_ride_db_data_to_model
 from com.taxicoop.service.DBHelper import DB_Helper
-## SEARCH RADIUS - 5KM
 from com.taxicoop.service.RideReq_To_Nearby_Taxi_Helper import send_ride_request_to_nearby_taxis
 from com.taxicoop.service.Trip_Summary_Service import Trip_Summary_Service
 
 load_dotenv()
-# TAXI_BASE_URL = "http://taxicoop-api-load-balancer-898563336.us-east-1.elb.amazonaws.com/api/taxis/v1" #  getenv('TAXI_SERVICE_BASE_URL')
 TAXI_BASE_URL = getenv('TAXI_SERVICE_BASE_URL', 'http://localhost:8081/api/taxis/v1/')
+
+STARTING_LONGITUDE = getenv('STARTING_LONGITUDE', 88.358536)
+ENDING_LONGITUDE = getenv('ENDING_LONGITUDE', 90.358536)
+
+STARTING_LATITUDE = getenv('STARTING_LATITUDE', 22.578005)
+ENDING_LATITUDE = getenv('ENDING_LATITUDE', 23.578005)
 
 print(" TAXI_BASE_URL {} ".format(TAXI_BASE_URL))
 
@@ -38,6 +42,21 @@ class Ride_Service:
         return result
 
     def request_ride(self, new_ride_request_dto: RequestNewRideDTO) -> Dict[str, Any]:
+
+        # check if the user's starting location is in the range
+        if not self.__is_req_in_range__(new_ride_request_dto.start_longitude, new_ride_request_dto.start_latitude):
+            return {
+                'status': "FAILED",
+                'message': 'User is out of the service area'
+            }
+
+        if not self.__is_req_in_range__(new_ride_request_dto.destination_longitude,
+                                        new_ride_request_dto.destination_latitude):
+            return {
+                'status': "FAILED",
+                'message': 'User destination is out of the service area'
+            }
+
         new_ride_request = Ride_Request(rider_id=new_ride_request_dto.rider_id,
                                         start_longitude=new_ride_request_dto.start_longitude,
                                         start_latitude=new_ride_request_dto.start_latitude,
@@ -80,9 +99,13 @@ class Ride_Service:
                 'selected_vehicle_type': confirm_ride.vehicle_type
             }
 
-            ride_req = transform_ride_db_data_to_model(DB_Helper.get_ride_by_ride_request_id(confirm_ride.ride_request_id))
+            ride_req = transform_ride_db_data_to_model(
+                DB_Helper.get_ride_by_ride_request_id(confirm_ride.ride_request_id))
             print(ride_req.__dict__)
-            print(" ride_req.ride_status= {} , {} , ride_req.ride_status == Ride_Request_Status.RIDE_REQUESTED.value = {}".format(ride_req.ride_status,Ride_Request_Status.RIDE_REQUESTED.value, ride_req.ride_status == Ride_Request_Status.RIDE_REQUESTED.value))
+            print(
+                " ride_req.ride_status= {} , {} , ride_req.ride_status == Ride_Request_Status.RIDE_REQUESTED.value = {}".format(
+                    ride_req.ride_status, Ride_Request_Status.RIDE_REQUESTED.value,
+                    ride_req.ride_status == Ride_Request_Status.RIDE_REQUESTED.value))
 
             if ride_req.ride_status == Ride_Request_Status.RIDE_REQUESTED.value:
                 DB_Helper.update_ride_request(confirm_ride.ride_request_id, data)
@@ -154,3 +177,12 @@ class Ride_Service:
             return response
 
         return response
+
+    def __is_req_in_range__(self, req_long, req_lat):
+        if not (STARTING_LONGITUDE <= req_long <= ENDING_LONGITUDE):
+            return False
+
+        if not (STARTING_LATITUDE <= req_lat <= ENDING_LATITUDE):
+            return False
+
+        return True
