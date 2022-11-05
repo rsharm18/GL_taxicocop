@@ -50,6 +50,7 @@ class Ride_Service:
                 'message': 'User is out of the service area'
             }
 
+        # check if the user's destination location is in the range
         if not self.__is_req_in_range__(new_ride_request_dto.destination_longitude,
                                         new_ride_request_dto.destination_latitude):
             return {
