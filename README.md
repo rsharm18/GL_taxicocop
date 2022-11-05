@@ -14,4 +14,3 @@
 * Taxi Location Publisher (mimic taxi movement)
 * User Data generation
 * Bulk Ride Request Generation
-* 
