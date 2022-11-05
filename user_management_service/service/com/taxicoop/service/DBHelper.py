@@ -24,3 +24,13 @@ class DB_Helper:
     @staticmethod
     def get_all_user():
         return user_mgmt.find()
+
+    @staticmethod
+    def update_user(email, values):
+        query = {"email": email}
+        update = {"$set": values}
+        user_data = user_mgmt.find_one(query)
+        if user_data is None:
+            raise Exception("Invalid User email id")
+
+        user_mgmt.update_one(query, update)

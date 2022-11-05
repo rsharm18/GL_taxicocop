@@ -1,3 +1,4 @@
+import traceback
 from datetime import datetime
 
 from com.taxicoop.service.DBHelper import DB_Helper
@@ -43,3 +44,18 @@ class UserService:
         for user in users:
             result.append(user_db_data_json(user))
         return result
+
+    def update_user(self, payload):
+        try:
+            DB_Helper.update_user(payload['email'], payload)
+            return {
+                'status': 'success',
+                'message': 'Successfully updated the user data'
+            }
+        except Exception as ex:
+            traceback.print_exc()
+
+        return {
+            'status': 'failed',
+            'message': 'Error updating the user data'
+        }
